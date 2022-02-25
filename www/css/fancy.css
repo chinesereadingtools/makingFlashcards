@@ -1,0 +1,9 @@
+#myGrid {
+  width: 100%;
+  height: calc(93% - 5px);
+  font-size: 25px;
+}
+
+button {
+
+}

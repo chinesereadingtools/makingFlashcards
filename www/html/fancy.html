@@ -1,0 +1,51 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>My Fancy Table</title>
+  <script
+    src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js">
+  </script>
+  <link rel="stylesheet" type="text/css" href="../css/fancy.css">
+  <link rel="stylesheet"
+    href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet"
+    href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+  <script type="text/javascript" src='../js/starsFilter.js'></script>
+</head>
+
+<body>
+  <div class="wrapper" style="height: 100%;">
+    <div style="margin-bottom: 5px; height: 7%">
+      <div id="buttons" style="float:left">
+      <button id="exportButton" type="button" onclick="exportWords()">Export
+        Selected</button>
+      <button id="clearButton" type="button" onclick="clearSelection()">Clear
+        Selection</button>
+      <button id="toggleButton" type="button"
+        onclick="toggleMigakuContainer();">Toggle Migaku</button>
+      <button id="parseButton" type="button" onclick="migakuParse();">Migaku Parse</button>
+      <select style="margin-top: 5px;" id="jsonFiles" name="Files">
+      </select>
+      </div>
+      <div id="stats" style="float:right; width:40%">
+        <div>Total number of unknown words in 1T sentences:
+          <span id="oneTwords"> </span>
+          (Currently know <span id="known"></span>% of the book)
+        </div>
+        <div>Total number of occurances covered:
+          <span id="occurances"> </span>
+          (<span id="percent"></span>% of the total book)
+        </div>
+      </div>
+    </div>
+    <div id="myGrid" class="ag-theme-balham"></div>
+  </div>
+
+
+  <script type="text/javascript" src='../js/fancyCode.js'></script>
+
+</body>
+
+
+</html>
