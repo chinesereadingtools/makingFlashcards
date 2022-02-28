@@ -6,6 +6,10 @@
   <script
     src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js">
   </script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <link rel="stylesheet" type="text/css" href="../css/fancy.css">
   <link rel="stylesheet"
     href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
@@ -18,15 +22,18 @@
   <div class="wrapper" style="height: 100%;">
     <div style="margin-bottom: 5px; height: 7%">
       <div id="buttons" style="float:left">
-      <button id="exportButton" type="button" onclick="exportWords()">Export
-        Selected</button>
-      <button id="clearButton" type="button" onclick="clearSelection()">Clear
-        Selection</button>
-      <button id="toggleButton" type="button"
-        onclick="toggleMigakuContainer();">Toggle Migaku</button>
-      <button id="parseButton" type="button" onclick="migakuParse();">Migaku Parse</button>
-      <select style="margin-top: 5px;" id="jsonFiles" name="Files">
-      </select>
+        <button id="exportButton" type="button" onclick="exportWords()">Export
+          Selected</button>
+        <button id="clearButton" type="button" onclick="clearSelection()">Clear
+          Selection</button>
+        <button id="toggleButton" type="button"
+          onclick="toggleMigakuContainer();">Toggle Migaku</button>
+        <button id="parseButton" type="button" onclick="migakuParse();">Migaku
+          Parse</button>
+        <button id="recalc" type="button" onclick="loadFile()">Recalc</button>
+        <select style="margin-top: 5px;" id="jsonFiles" name="Files"
+          onchange="loadFile()">
+        </select>
       </div>
       <div id="stats" style="float:right; width:40%">
         <div>Total number of unknown words in 1T sentences:

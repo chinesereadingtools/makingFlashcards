@@ -5,8 +5,14 @@ const fs = require('fs');
 const bodyParser = require('body-parser')
 const express = require("express")
 const app = express()
+const oneTsentences = require("./scripts/oneTsentences.js")
 
 const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"))
+
+var knownWordsText = fs.readFileSync(
+  config.knownWords, "UTF-8", "r");
+var known = new Set([...knownWordsText.split("\n")]);
+
 
 // Creating server, loads files from current dir
 app.use(express.static('../www/'))
@@ -25,24 +31,36 @@ app.get("/filelist", (req, res, next) => {
   });
 });
 
-app.post("/loadfile", (req, res, next) => {
-  var filename = req.body.name
-  fs.readFile(config.parsedSentences + "/" + filename, (err, data) => {
-    res.json(JSON.parse(data));
-  });
-});
-
 app.post("/exportwords", (req, res, next) => {
   var words = req.body.words
   console.log(words)
+  words.forEach(word => known.add(word))
   fs.appendFile(config.exportedWords,
     words.join("\n") + "\n",
     (err) => {
       res.json({
-        success: err
+        success: err,
+        totalWords: known.size
       });
     });
 });
+
+app.post("/loadfile", (req, res, next) => {
+  var filename = req.body.name
+  var parsed = oneTsentences.parse(filename, known)
+  res.json(parsed)
+});
+
+app.get("/saveWordlist", (req, res, next) => {
+  fs.writeFile(config.knownWords, [...known.values()].join("\n"), (err) => {
+    res.json({
+      success: err,
+      totalWords: known.size
+    })
+  });
+
+});
+
 
 var httpServer = http.createServer(app);
 

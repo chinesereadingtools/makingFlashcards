@@ -10,7 +10,7 @@ var columnDefs = [{
   {
     headerName: '#',
     field: 'occurances',
-    // sortable: true,
+    sortable: true,
     width: 100,
     filter: 'agNumberColumnFilter',
     suppressSizeToFit: true
@@ -39,6 +39,25 @@ var columnDefs = [{
   },
 
 ]
+
+function sortRowData(rowData) {
+  rowData.sort((x, y) => {
+    if (x.occurances == y.occurances) {
+      if (x.word > y.word) {
+        return -1
+      } else {
+        return 1
+      }
+    } else {
+      if (x.occurances > y.occurances) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+  });
+}
+
 
 globalThis.gridOptions = {
   columnDefs: columnDefs,
@@ -69,7 +88,8 @@ async function main() {
   console.log(data)
   var fileSelector = document.querySelector('#jsonFiles');
 
-  globalThis.gridOptions.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth - 40)
+  globalThis.gridOptions.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth -
+    40)
 
   data.forEach((file) => {
     var opt = document.createElement('option');
@@ -78,22 +98,6 @@ async function main() {
     fileSelector.appendChild(opt);
   });
 
-  fileSelector.addEventListener('change', async (event) => {
-    console.log(event)
-    console.log(fileSelector.value)
-    let contents = await fetch("/loadfile", {
-      method: 'POST',
-      headers: {
-        'Content-Type': "application/json;charset=utf-8"
-      },
-      body: JSON.stringify({
-        "name": fileSelector.value
-      })
-    });
-    let obj = await contents.json()
-    onReaderLoad(obj)
-    migakuParse()
-  });
 
 }
 
@@ -118,7 +122,9 @@ async function exportWords() {
   let obj = await contents.json()
   console.log(obj)
   clearSelection()
-  alert("Exported words " + words.join(','))
+  alert(
+    `Exported words ${words.join(',')} now know ${obj.totalWords} total words`
+  )
 }
 
 function toggleMigakuContainer() {
@@ -143,47 +149,35 @@ function migakuParse() {
 
 main()
 
-function onReaderLoad(obj) {
-  console.log(obj.occurances)
-  var sentences = obj.sentences
-  console.log(sentences)
-  var keys = Object.keys(sentences)
-  console.log(keys)
-  keys.sort((x, y) => {
-    if (sentences[x].frequency > sentences[y].frequency) {
-      return -1;
-    } else {
-      return 1;
-    }
+async function saveWordList() {
+  let response = await fetch("/saveWordlist");
+  let data = await response.json();
+  alert(data.message)
+}
+
+async function loadFile() {
+
+  var fileSelector = document.querySelector('#jsonFiles');
+
+  let response = await fetch("/loadfile", {
+    method: 'POST',
+    headers: {
+      'Content-Type': "application/json;charset=utf-8"
+    },
+    body: JSON.stringify({
+      "name": fileSelector.value
+    })
   });
+  let data = await response.json();
 
+  console.log(_.isEqual(data.rowData, globalThis.rowData))
 
-  console.log(keys)
-  globalThis.jsonObj = obj
-
-  var rowData = []
-
-  for (var key of keys) {
-    var data = sentences[key]
-    var candidates = data['sentences']
-    for (var sentIdx of Object.keys(candidates)) {
-
-      cand = candidates[sentIdx]
-      sentence = cand['sentence']
-      progress = cand['position']
-
-      rowData.push({
-        word: key,
-        occurances: data['frequency'],
-        stars: data['stars'],
-        position: progress,
-        sentence: sentence
-      });
-    }
-  }
-  console.log(rowData.length)
-  globalThis.gridOptions.api.setRowData(rowData)
+  globalThis.jsonObj = data
+  sortRowData(data.rowData)
+  globalThis.gridOptions.api.setRowData(data.rowData)
   reCalcStats();
+  migakuParse();
+
 }
 
 function reCalcStats() {
@@ -203,5 +197,6 @@ function reCalcStats() {
   document.querySelector('#oneTwords').innerHTML = words;
   document.querySelector('#occurances').innerHTML = occurances;
   document.querySelector('#percent').innerHTML = percent.toFixed(2);
-  document.querySelector('#known').innerHTML = globalThis.jsonObj.currentKnown.toFixed(2);
+  document.querySelector('#known').innerHTML = globalThis.jsonObj.currentKnown
+    .toFixed(2);
 }
