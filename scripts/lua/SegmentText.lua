@@ -60,7 +60,7 @@ function segmentFile(filename)
   io.close(output)
 end
 
-local directory = config.authorSymlinks
+local directory = config.library
 if directory ~= nil then
   traverseDirectory(directory)
 end
