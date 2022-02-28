@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const express = require("express")
 const app = express()
 const oneTsentences = require("./scripts/oneTsentences.js")
+const importFromAnki = require("./scripts/importFromAnki.js")
 
 const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"))
 
@@ -59,6 +60,18 @@ app.get("/saveWordlist", (req, res, next) => {
     })
   });
 
+});
+
+app.get("/loadAnki", (req, res, next) => {
+  importFromAnki.exportAnkiKeywords().then(words => {
+    words.forEach(word => {
+      known.add(word);
+    });
+
+    res.json({
+      success: 1
+    })
+  });
 });
 
 

@@ -155,6 +155,16 @@ async function saveWordList() {
   alert(data.message)
 }
 
+async function ankiLoad() {
+  showLoader();
+  let response= await fetch("/loadAnki");
+  let data = await response.json();
+  console.log(data);
+  finishLoader();
+
+
+}
+
 async function loadFile() {
 
   var fileSelector = document.querySelector('#jsonFiles');

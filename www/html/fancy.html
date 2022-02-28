@@ -16,9 +16,11 @@
   <link rel="stylesheet"
     href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
   <script type="text/javascript" src='../js/starsFilter.js'></script>
+  <script type="text/javascript" src='../js/spinner.js'></script>
 </head>
 
 <body>
+  <div id="loader"></div>
   <div class="wrapper" style="height: 100%;">
     <div style="margin-bottom: 5px; height: 7%">
       <div id="buttons" style="float:left">
@@ -30,7 +32,12 @@
           onclick="toggleMigakuContainer();">Toggle Migaku</button>
         <button id="parseButton" type="button" onclick="migakuParse();">Migaku
           Parse</button>
+        <button id="syncButton" type="button" onclick="ankiLoad();">Load Anki
+        </button>
         <button id="recalc" type="button" onclick="loadFile()">Recalc</button>
+        <button id="saveProgress" type="button" onclick="saveWordList()">Save
+          Progress</button>
+        </br>
         <select style="margin-top: 5px;" id="jsonFiles" name="Files"
           onchange="loadFile()">
         </select>
