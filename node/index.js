@@ -7,12 +7,9 @@ const express = require("express")
 const app = express()
 const oneTsentences = require("./scripts/oneTsentences.js")
 const importFromAnki = require("./scripts/importFromAnki.js")
+const knownWords = require("./scripts/knownWords.js")
 
 const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"))
-
-var knownWordsText = fs.readFileSync(
-  config.knownWords, "UTF-8", "r");
-var known = new Set([...knownWordsText.split("\n")]);
 
 
 // Creating server, loads files from current dir
@@ -35,39 +32,43 @@ app.get("/filelist", (req, res, next) => {
 app.post("/exportwords", (req, res, next) => {
   var words = req.body.words
   console.log(words)
-  words.forEach(word => known.add(word))
+  words.forEach(word => knownWords.addWord(word, 365))
   fs.appendFile(config.exportedWords,
     words.join("\n") + "\n",
     (err) => {
       res.json({
         success: err,
-        totalWords: known.size
+        totalWords: knownWords.knownWords()
       });
     });
 });
 
 app.post("/loadfile", (req, res, next) => {
   var filename = req.body.name
-  var parsed = oneTsentences.parse(filename, known)
+  var wellKnown = req.body.wellKnown
+  var parsed;
+  if (wellKnown) {
+    parsed = oneTsentences.parse(filename, knownWords.wellKnown())
+  } else {
+    parsed = oneTsentences.parse(filename, knownWords.known())
+  }
   res.json(parsed)
 });
 
 app.get("/saveWordlist", (req, res, next) => {
-  fs.writeFile(config.knownWords, [...known.values()].join("\n"), (err) => {
+  // todo, do a callback promise or smth
+  knownWords.saveWords((err) => {
     res.json({
       success: err,
-      totalWords: known.size
+      totalWords: knownWords.knownWords()
     })
   });
 
 });
 
 app.get("/loadAnki", (req, res, next) => {
-  importFromAnki.exportAnkiKeywords().then(words => {
-    words.forEach(word => {
-      known.add(word);
-    });
-
+  importFromAnki.exportAnkiKeywords().then(ankiObject => {
+    knownWords.mergeWords(ankiObject);
     res.json({
       success: 1
     })

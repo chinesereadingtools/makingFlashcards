@@ -7,7 +7,7 @@ function sentenceMostlyKnown(sentence, known) {
   sentence.forEach(([word, type]) => {
     if (type != 3) return;
 
-    if (!known.has(word)) {
+    if (!(word in known)) {
       unknown += 1;
       unknownWord = word;
     }
@@ -23,7 +23,7 @@ function sentenceKnown(sentence, exception, known) {
   sentence.forEach(([word, type]) => {
     if (type != 3) return;
     if (word == exception) return;
-    if (!known.has(word)) {
+    if (!(word in known)) {
       allKnown = false;
     }
   });

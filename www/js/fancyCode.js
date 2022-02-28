@@ -106,8 +106,6 @@ async function main() {
   });
 
   loadFile()
-
-
 }
 
 function clearSelection() {
@@ -183,7 +181,7 @@ async function ankiLoad() {
   });
 }
 
-async function loadFile() {
+async function loadFile(wellKnown = false) {
 
   var fileSelector = document.querySelector('#jsonFiles');
 
@@ -193,7 +191,8 @@ async function loadFile() {
       'Content-Type': "application/json;charset=utf-8"
     },
     body: JSON.stringify({
-      "name": fileSelector.value
+      name: fileSelector.value,
+      wellKnown: wellKnown
     })
   });
   let data = await response.json();

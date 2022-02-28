@@ -13,7 +13,7 @@ function generateStats(segText, knownWords) {
       if (type != 3) return;
       totalWords += 1
       // todo, iterate the word table to make this faster
-      if (knownWords.has(word)) {
+      if (word in knownWords) {
         totalKnownWords += 1
       }
       if (word in wordTable) {
@@ -64,7 +64,7 @@ class Document {
     this.unKnownWords = {}
 
     Object.entries(this.wordTable).forEach(([word, occurances]) => {
-      if (knownWords.has(word)) {
+      if (word in knownWords) {
         this.knownWords[word] = occurances
       } else {
         this.unKnownWords[word] = occurances

@@ -39,8 +39,11 @@ async function exportAnkiKeywords() {
     cards: reading.result
   });
 
-  var readingWords = readingInfo.result.map(card => card.fields.Simplified
-    .value);
+  var intervalMap = {}
+  Object.assign(intervalMap, ...readingInfo.result.map(
+    card => ({
+      [card.fields.Simplified.value]: card.interval
+    })));
 
   var skritter = await invoke('findCards', {
     query: 'deck:Skritter'
@@ -48,15 +51,19 @@ async function exportAnkiKeywords() {
   var skritterInfo = await invoke('cardsInfo', {
     cards: skritter.result
   });
-  var skritterWords = skritterInfo.result.map(card =>
-    card.fields.Word.value
-  );
 
-  var words = [...readingWords, ...skritterWords]
-  return words;
+  Object.assign(intervalMap, ...skritterInfo.result.map(
+    card => ({
+      [card.fields.Word.value]: card.interval
+    })));
+
+
+  console.log(intervalMap);
+  return intervalMap;
 
   // var writeFile = fs.writeFile(config.ankiKeywords, words.join("\n"), (err) => console.log(err));
-  var writeFile = await fs.writeFile(config.ankiKeywords, words.join("\n"));
+  var writeFile = await fs.writeFile(config.ankiKeywords, words.join(
+    "\n"));
 }
 
 module.exports = {
