@@ -12,7 +12,8 @@ class StarsFilter {
                 </select> 
             </div>`;
     this.numberOfStars = this.eGui.querySelector('#numberOfStars');
-    this.numberOfStars.addEventListener('change', this.onRbChanged.bind(this));
+    this.numberOfStars.addEventListener('change', this.onRbChanged.bind(
+    this));
     this.filterActive = false;
     this.stars = 0
     this.filterChangedCallback = params.filterChangedCallback;
@@ -36,12 +37,36 @@ class StarsFilter {
   isFilterActive() {
     return this.stars != 0;
   }
+}
 
-  // this example isn't using getModel() and setModel(),
-  // so safe to just leave these empty. don't do this in your code!!!
-  //
-  // except I did anyways boi
-  getModel() {}
 
-  setModel() {}
+class WordFilter {
+  init(params) {
+    this.eGui = document.createElement('div');
+    this.eGui.innerHTML = `<div style="display: inline-block;">
+        <span class=words></span>
+      </div>`;
+    this.wordsSpan = this.eGui.querySelector('.words');
+    this.filterActive = false;
+    this.filterChangedCallback = params.filterChangedCallback;
+    this.addedWords = new Set()
+  }
+
+  addWord(word) {
+    this.addedWords.add(word)
+    this.filterChangedCallback();
+  }
+
+  getGui() {
+    this.wordsSpan = [...this.addedWords.values()].join(",");
+    return this.eGui;
+  }
+
+  doesFilterPass(params) {
+    return !this.addedWords.has(params.data.word);
+  }
+
+  isFilterActive() {
+    return this.addedWords.size != 0;
+  }
 }

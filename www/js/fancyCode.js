@@ -1,10 +1,17 @@
 var columnDefs = [{
+    headerName: 'Mark',
+    field: 'markButton',
+    cellRenderer: MarkLearnedRenderer,
+    resizable: false,
+    width: 50,
+    suppressSizeToFit: true
+  },
+  {
     headerName: 'Word',
     field: 'word',
-    // sortable: true,
+    resizable: true,
     width: 130,
-    checkboxSelection: true,
-    filter: true,
+    filter: WordFilter,
     suppressSizeToFit: true
   },
   {
@@ -98,6 +105,8 @@ async function main() {
     fileSelector.appendChild(opt);
   });
 
+  loadFile()
+
 
 }
 
@@ -106,25 +115,30 @@ function clearSelection() {
   // Todo, delele selected from rowData???
 }
 
-async function exportWords() {
-
+async function exportSelectedWords() {
   const selectedRows = globalThis.gridOptions.api.getSelectedRows();
-  var words = [...new Set(selectedRows.map(row => row.word))];
-  let contents = await fetch("/exportwords", {
-    method: 'POST',
-    headers: {
-      'Content-Type': "application/json;charset=utf-8"
-    },
-    body: JSON.stringify({
-      words: words
-    })
+  exportWords(selectedRows)
+}
+
+async function exportWords(rows) {
+  withLoader(async () => {
+    var words = [...new Set(rows.map(row => row.word))];
+    let contents = await fetch("/exportwords", {
+      method: 'POST',
+      headers: {
+        'Content-Type': "application/json;charset=utf-8"
+      },
+      body: JSON.stringify({
+        words: words
+      })
+    });
+    let obj = await contents.json()
+    console.log(obj)
+    clearSelection()
+    console.log(
+      `Exported words ${words.join(',')} now know ${obj.totalWords} total words`
+    )
   });
-  let obj = await contents.json()
-  console.log(obj)
-  clearSelection()
-  alert(
-    `Exported words ${words.join(',')} now know ${obj.totalWords} total words`
-  )
 }
 
 function toggleMigakuContainer() {
@@ -143,26 +157,30 @@ function migakuParse() {
     migakuParse.click()
   } else {
     console.log("Consider installing Migaku")
-    console.log(migakuParse)
   }
 }
 
 main()
 
+async function withLoader(fn) {
+  showLoader();
+  await fn();
+  finishLoader();
+}
+
 async function saveWordList() {
-  let response = await fetch("/saveWordlist");
-  let data = await response.json();
-  alert(data.message)
+  withLoader(async () => {
+    let response = await fetch("/saveWordlist");
+    let data = await response.json();
+  });
 }
 
 async function ankiLoad() {
-  showLoader();
-  let response= await fetch("/loadAnki");
-  let data = await response.json();
-  console.log(data);
-  finishLoader();
-
-
+  withLoader(async () => {
+    let response = await fetch("/loadAnki");
+    let data = await response.json();
+    console.log(data);
+  });
 }
 
 async function loadFile() {
@@ -180,8 +198,6 @@ async function loadFile() {
   });
   let data = await response.json();
 
-  console.log(_.isEqual(data.rowData, globalThis.rowData))
-
   globalThis.jsonObj = data
   sortRowData(data.rowData)
   globalThis.gridOptions.api.setRowData(data.rowData)
@@ -189,6 +205,7 @@ async function loadFile() {
   migakuParse();
 
 }
+
 
 function reCalcStats() {
   var currentWords = {}
