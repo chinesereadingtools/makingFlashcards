@@ -46,12 +46,8 @@ app.post("/exportwords", (req, res, next) => {
 app.post("/loadfile", (req, res, next) => {
   var filename = req.body.name
   var wellKnown = req.body.wellKnown
-  var parsed;
-  if (wellKnown) {
-    parsed = oneTsentences.parse(filename, knownWords.wellKnown())
-  } else {
-    parsed = oneTsentences.parse(filename, knownWords.known())
-  }
+  var howKnown = wellKnown ? 20 : 0;
+  var parsed = oneTsentences.parse(filename, howKnown)
   res.json(parsed)
 });
 

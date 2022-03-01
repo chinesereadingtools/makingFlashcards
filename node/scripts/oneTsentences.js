@@ -1,13 +1,14 @@
 const documentStats = require("./documentStats.js")
+const known = require("./knownWords.js")
 
-function sentenceMostlyKnown(sentence, known) {
+function sentenceMostlyKnown(sentence, howKnown) {
 
   var unknown = 0;
   var unknownWord = ""
   sentence.forEach(([word, type]) => {
     if (type != 3) return;
 
-    if (!(word in known)) {
+    if (!(known.isKnown(word, howKnown))) {
       unknown += 1;
       unknownWord = word;
     }
@@ -18,12 +19,12 @@ function sentenceMostlyKnown(sentence, known) {
 }
 
 
-function sentenceKnown(sentence, exception, known) {
+function sentenceKnown(sentence, exception, howKnown) {
   var allKnown = true;
   sentence.forEach(([word, type]) => {
     if (type != 3) return;
     if (word == exception) return;
-    if (!(word in known)) {
+    if (!(known.isKnown(word, howKnown))) {
       allKnown = false;
     }
   });
@@ -34,20 +35,21 @@ function toText(sentence) {
   return sentence.map(([word, type]) => word).join("");
 }
 
-function parseFile(filename, known) {
+function parseFile(filename, howKnown) {
 
   console.log(`Loading ${filename}`)
-  var document = new documentStats.Document(filename, known)
+  var document = new documentStats.Document(filename)
   var segText = document.text
 
   var oneT = []
   segText.forEach((sentence, index) => {
-    var [isOneT, unknownWord] = sentenceMostlyKnown(sentence, known);
+    var [isOneT, unknownWord] = sentenceMostlyKnown(sentence, howKnown);
 
-    if (isOneT) {
+
+    if (isOneT && !known.isKnown(unknownWord)) {
       var combinedSentence = toText(sentence)
       for (var i = index - 1; i >= Math.max(index - 6, 0); i--) {
-        var isKnown = sentenceKnown(segText[i], unknownWord, known)
+        var isKnown = sentenceKnown(segText[i], unknownWord, howKnown)
         if (!isKnown) {
           break;
         }
@@ -55,7 +57,7 @@ function parseFile(filename, known) {
       }
       for (var i = index + 1; i < Math.min(index + 6, segText
           .length); i++) {
-        var isKnown = sentenceKnown(segText[i], unknownWord, known)
+        var isKnown = sentenceKnown(segText[i], unknownWord, howKnown)
         if (!isKnown) {
           break;
         }
@@ -85,8 +87,6 @@ function parseFile(filename, known) {
 
 }
 
-
-
 module.exports = {
-  parse: (filename, known) => parseFile(filename, known),
+  parse: parseFile,
 }

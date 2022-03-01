@@ -21,11 +21,15 @@ function mergeWords(other) {
 module.exports = {
   addWord: addWord,
   mergeWords: mergeWords,
-  known: () => known,
-  wellKnown: () => {
-    return Object.fromEntries(Object.entries(known).filter(
-      ([word, interval]) => interval > 20));
+  isKnown: (word, howKnown=0) => {
+    // if word is completly unknown return false
+    if (!(word in known)) {
+      return false;
+    }
+    // we know it at least somewhat known
+    return known[word] >= howKnown;
   },
+
   knownWords: () => Object.keys(known).length,
   saveWords: saveWords
 

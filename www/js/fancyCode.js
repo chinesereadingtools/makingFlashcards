@@ -197,6 +197,7 @@ async function loadFile(wellKnown = false) {
   });
   let data = await response.json();
 
+  globalThis.wellKnown = wellKnown;
   globalThis.jsonObj = data
   sortRowData(data.rowData)
   globalThis.gridOptions.api.setRowData(data.rowData)
@@ -207,6 +208,8 @@ async function loadFile(wellKnown = false) {
 
 
 function reCalcStats() {
+  var wellKnown = globalThis.wellKnown
+  var data = globalThis.jsonObj
   var currentWords = {}
   globalThis.gridOptions.api.forEachNodeAfterFilter((rowNode, index) => {
     currentWords[rowNode.data.word] = rowNode.data.occurances
@@ -218,11 +221,12 @@ function reCalcStats() {
     words += 1;
     occurances += val;
   });
-  var percent = occurances / globalThis.jsonObj.totalWords * 100;
+  var percent = occurances / data.totalWords * 100;
+
+  var currentKnown = !wellKnown ? data.currentWellKnown : data.currentKnown
 
   document.querySelector('#oneTwords').innerHTML = words;
   document.querySelector('#occurances').innerHTML = occurances;
   document.querySelector('#percent').innerHTML = percent.toFixed(2);
-  document.querySelector('#known').innerHTML = globalThis.jsonObj.currentKnown
-    .toFixed(2);
+  document.querySelector('#known').innerHTML = currentKnown.toFixed(2);
 }

@@ -1,20 +1,25 @@
 const fs = require('fs')
+const known = require("./knownWords.js")
 const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"));
 
 var frequencyData = JSON.parse(fs.readFileSync(
   config.frequencyData + "Combined.json", "UTF-8", "r"));
 
-function generateStats(segText, knownWords) {
+function generateStats(segText) {
   wordTable = {}
   totalWords = 0
   totalKnownWords = 0
+  totalWellKnownWords = 0
   segText.forEach((sentence) => {
     sentence.forEach(([word, type]) => {
       if (type != 3) return;
       totalWords += 1
       // todo, iterate the word table to make this faster
-      if (word in knownWords) {
+      if (known.isKnown(word)) {
         totalKnownWords += 1
+        if (known.isKnown(word, 20)) {
+          totalWellKnownWords += 1
+        }
       }
       if (word in wordTable) {
         wordTable[word] += 1
@@ -24,7 +29,7 @@ function generateStats(segText, knownWords) {
 
     });
   });
-  return [wordTable, totalWords, totalKnownWords]
+  return [wordTable, totalWords, totalKnownWords, totalWellKnownWords]
 
 }
 
@@ -49,7 +54,7 @@ function convertRanking(word) {
 
 class Document {
   #segText;
-  constructor(filename, knownWords) {
+  constructor(filename) {
     this.filename = filename
 
     var fullFilename = config.segmentedText + filename
@@ -57,14 +62,19 @@ class Document {
       fullFilename,
       "UTF-8", "r"));
 
-    [this.wordTable, this.totalWords, this.totalKnownWords] = generateStats(
-      this.#segText, knownWords)
+    [
+      this.wordTable,
+      this.totalWords,
+      this.totalWellKnownWords,
+      this.totalKnownWords
+    ] = generateStats(this.#segText)
 
+    this.wellKnownWords = {}
     this.knownWords = {}
     this.unKnownWords = {}
 
     Object.entries(this.wordTable).forEach(([word, occurances]) => {
-      if (word in knownWords) {
+      if (known.isKnown(word)) {
         this.knownWords[word] = occurances
       } else {
         this.unKnownWords[word] = occurances
@@ -80,13 +90,10 @@ class Document {
     return {
       totalWords: this.totalWords,
       curentKnownWords: this.totalKnownWords,
-      currentKnown: this.totalKnownWords / this.totalWords * 100
-
-
-
-
+      currentWellKnownWords: this.totalWellKnownWords,
+      currentKnown: this.totalKnownWords / this.totalWords * 100,
+      currentWellKnown: this.totalWellKnownWords / this.totalWords * 100
     }
-
   }
 
   stats(word) {
