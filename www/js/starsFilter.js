@@ -13,7 +13,7 @@ class StarsFilter {
             </div>`;
     this.numberOfStars = this.eGui.querySelector('#numberOfStars');
     this.numberOfStars.addEventListener('change', this.onRbChanged.bind(
-    this));
+      this));
     this.filterActive = false;
     this.stars = 0
     this.filterChangedCallback = params.filterChangedCallback;

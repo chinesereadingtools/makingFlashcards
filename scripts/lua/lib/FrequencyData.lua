@@ -82,5 +82,4 @@ function FrequencyData.loadWordListJSON()
     return wordList
 end
 
-
 return FrequencyData

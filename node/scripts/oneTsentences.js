@@ -70,7 +70,7 @@ function parseFile(filename, howKnown) {
         word: unknownWord,
         occurances: stats.occurances,
         stars: stats.stars,
-        position: index / segText.length * 100,
+        position: (index / segText.length * 100).toFixed(2),
         sentence: combinedSentence
       });
     }

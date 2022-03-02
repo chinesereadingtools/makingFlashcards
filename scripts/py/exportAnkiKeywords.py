@@ -3,12 +3,15 @@ import json
 import pprint
 import urllib.request
 
+
 def request(action, **params):
     return {'action': action, 'params': params, 'version': 6}
 
+
 def invoke(action, **params):
     requestJson = json.dumps(request(action, **params)).encode('utf-8')
-    response = json.load(urllib.request.urlopen(urllib.request.Request('http://localhost:8765', requestJson)))
+    response = json.load(urllib.request.urlopen(
+        urllib.request.Request('http://localhost:8765', requestJson)))
     if len(response) != 2:
         raise Exception('response has an unexpected number of fields')
     if 'error' not in response:
@@ -19,8 +22,9 @@ def invoke(action, **params):
         raise Exception(response['error'])
     return response['result']
 
-results= invoke('findCards', query='deck:Reading')
-skritterResults= invoke('findCards', query='deck:Skritter')
+
+results = invoke('findCards', query='deck:Reading')
+skritterResults = invoke('findCards', query='deck:Skritter')
 # result = invoke('deckNames')
 # print('got list of decks: {}'.format(result))
 
@@ -39,7 +43,7 @@ with open("../../config.json", "r") as c:
 
             fields = card['fields']
             word = ""
-            
+
             if (card['modelName'] == "Refold Mandarin 1k"):
                 word = fields['Simplified']['value']
             elif (card['modelName'] == "Reading Card"):
@@ -54,4 +58,3 @@ with open("../../config.json", "r") as c:
             fields = card['fields']
             word = fields['Word']['value']
             w.write(word + "\n")
-

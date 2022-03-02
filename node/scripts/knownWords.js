@@ -21,7 +21,7 @@ function mergeWords(other) {
 module.exports = {
   addWord: addWord,
   mergeWords: mergeWords,
-  isKnown: (word, howKnown=0) => {
+  isKnown: (word, howKnown = 0) => {
     // if word is completly unknown return false
     if (!(word in known)) {
       return false;

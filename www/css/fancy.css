@@ -1,5 +1,5 @@
 body {
-	color: rgba(245, 245, 245, 0.64);
+  color: rgba(245, 245, 245, 0.64);
   /* background-color: #3d4749;*/
   background-color: #202020;
 
@@ -16,7 +16,6 @@ body {
 }
 
 button {
-
   display: inline-block;
   padding: 0.3em 1.2em;
   margin: 0 0.3em 0.3em 0;

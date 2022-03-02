@@ -7,7 +7,8 @@ class MarkLearnedRenderer {
     this.eventListener = () => {
       var row = params.node.data
       exportWords([row])
-      const filterInstance = globalThis.gridOptions.api.getFilterInstance('word');
+      const filterInstance = globalThis.gridOptions.api.getFilterInstance(
+        'word');
       filterInstance.addWord(row.word);
     }
     this.eGui.addEventListener('click', this.eventListener);

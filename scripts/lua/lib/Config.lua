@@ -1,4 +1,4 @@
-local JSON = require 'JSON'
+local JSON = require "JSON"
 
 -- MUST RUN CTA FROM GIT DIRECTORY
 local jsonFile = io.open("./config.json", "r")
