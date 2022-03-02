@@ -106,6 +106,11 @@ async function main() {
   });
 
   loadFile()
+  setTimeout(() => {
+      migakuParse()
+    },
+    3000);
+
 }
 
 function clearSelection() {
@@ -142,10 +147,10 @@ async function exportWords(rows) {
 function toggleMigakuContainer() {
   var container = document.querySelector('#migaku-toolbar-container')
   var state = container.style.display;
-  if (state != 'none') {
-    container.style.display = 'none';
+  if (state != 'block') {
+    container.style.display = 'block';
   } else {
-    container.style.display = '';
+    container.style.display = 'none';
   }
 }
 

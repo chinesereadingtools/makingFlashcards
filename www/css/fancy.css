@@ -5,6 +5,10 @@ body {
 
 }
 
+#migaku-toolbar-container {
+  display: none;
+}
+
 #myGrid {
   width: 100%;
   height: calc(93% - 5px);
