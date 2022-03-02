@@ -9,38 +9,45 @@ body {
   display: none;
 }
 
-#myGrid {
+#sentenceGrid {
+  font-size: 25px;
+}
+
+#wordGrid {
+  font-size: 25px;
+}
+
+.myGrid {
   width: 100%;
   height: calc(93% - 5px);
-  font-size: 25px;
 }
 
 button {
   display: inline-block;
-  padding: 0.3em 1.2em;
+  padding: 0.35em 1.2em;
+  border: 0.1em solid #FFFFFF;
   margin: 0 0.3em 0.3em 0;
-  border-radius: 2em;
+  border-radius: 0.12em;
   box-sizing: border-box;
   text-decoration: none;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
   color: #FFFFFF;
-  background-color: #4eb5f1;
   text-align: center;
   transition: all 0.2s;
 }
 
 button:hover {
-  background-color: #4095c6;
+  color: #000000;
+  background-color: #FFFFFF;
 }
 
 @media all and (max-width:30em) {
   button {
     display: block;
-    margin: 0.2em auto;
+    margin: 0.4em auto;
   }
 }
-
 
 #loader {
   display: none;
@@ -92,4 +99,19 @@ button:hover {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+}
+
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
 }

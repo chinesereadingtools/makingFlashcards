@@ -1,93 +1,5 @@
-var columnDefs = [{
-    headerName: 'Mark',
-    field: 'markButton',
-    cellRenderer: MarkLearnedRenderer,
-    resizable: false,
-    width: 50,
-    suppressSizeToFit: true
-  },
-  {
-    headerName: 'Word',
-    field: 'word',
-    resizable: true,
-    width: 130,
-    filter: WordFilter,
-    suppressSizeToFit: true
-  },
-  {
-    headerName: '#',
-    field: 'occurances',
-    sortable: true,
-    width: 100,
-    filter: 'agNumberColumnFilter',
-    suppressSizeToFit: true
-  },
-  {
-    headerName: 'Stars',
-    field: 'stars',
-    // sortable: true,
-    width: 160,
-    filter: StarsFilter,
-    suppressSizeToFit: true
-  },
-  {
-    headerName: 'Pos',
-    field: 'position',
-    width: 100,
-    filter: true,
-    suppressSizeToFit: true
-  },
-  {
-    headerName: 'Sentence',
-    field: 'sentence',
-    resizable: true,
-    wrapText: true,
-    autoHeight: true
-  },
-
-]
-
-function sortRowData(rowData) {
-  rowData.sort((x, y) => {
-    if (x.occurances == y.occurances) {
-      if (x.word > y.word) {
-        return -1
-      } else {
-        return 1
-      }
-    } else {
-      if (x.occurances > y.occurances) {
-        return -1;
-      } else {
-        return 1;
-      }
-    }
-  });
-}
-
-
-globalThis.gridOptions = {
-  columnDefs: columnDefs,
-  rowData: [],
-  rowHeight: 100,
-  //getRowHeight: params => params.
-  rowBuffer: 100,
-  rowSelection: 'multiple',
-  enableCellTextSelection: true,
-  ensureDomOrder: true,
-  suppressColumnVirtualisation: true,
-  suppressRowClickSelection: true,
-  // If these can be ratelimited then reenable
-  // onBodyScrollEnd: (event) => migakuParse(),
-  onSortChanged: (event) => migakuParse(),
-  onFilterChanged: (event) => {
-    reCalcStats();
-    migakuParse();
-  },
-}
-
 async function main() {
-  var eGridDiv = document.querySelector('#myGrid')
+  var eGridDiv = document.querySelector('#sentenceGrid')
   new agGrid.Grid(eGridDiv, globalThis.gridOptions)
 
   let response = await fetch("/filelist");
@@ -111,16 +23,70 @@ async function main() {
     },
     3000);
 
+  document.querySelector('#toggleButton').addEventListener('click',
+    toggleMigakuContainer);
+  document.querySelector('#parseButton').addEventListener('click',
+    migakuParse);
+  document.querySelector('#syncButton').addEventListener('click',
+    ankiLoad);
+  document.querySelector('#loadAll').addEventListener('click',
+    () => loadFile(false));
+  document.querySelector('#loadKnown').addEventListener('click',
+    () => loadFile(true));
+  document.querySelector('#saveProgress').addEventListener('click',
+    saveWordList);
+  document.querySelector('#jsonFiles').addEventListener('change',
+    () => loadFile(false));
+
+  document.getElementById("defaultTab").click();
+
 }
 
-function clearSelection() {
-  globalThis.gridOptions.api.deselectAll()
-  // Todo, delele selected from rowData???
-}
 
-async function exportSelectedWords() {
-  const selectedRows = globalThis.gridOptions.api.getSelectedRows();
-  exportWords(selectedRows)
+
+function openGrid(evt, gridName) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  var contents = document.getElementById(gridName)
+  console.log(contents)
+  document.getElementById(gridName).style.display = "block";
+  evt.currentTarget.className += " active";
+
+  var eGridDiv = document.querySelector('#sentenceGrid')
+  globalThis.gridOptions.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth -
+    40)
+} 
+
+function sortRowData(rowData) {
+  rowData.sort((x, y) => {
+    if (x.occurances == y.occurances) {
+      if (x.word > y.word) {
+        return -1
+      } else {
+        return 1
+      }
+    } else {
+      if (x.occurances > y.occurances) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+  });
 }
 
 async function exportWords(rows) {
@@ -136,13 +102,12 @@ async function exportWords(rows) {
       })
     });
     let obj = await contents.json()
-    console.log(obj)
-    clearSelection()
     console.log(
       `Exported words ${words.join(',')} now know ${obj.totalWords} total words`
     )
   });
 }
+
 
 function toggleMigakuContainer() {
   var container = document.querySelector('#migaku-toolbar-container')
@@ -162,8 +127,6 @@ function migakuParse() {
     console.log("Consider installing Migaku")
   }
 }
-
-main()
 
 async function withLoader(fn) {
   showLoader();
@@ -235,3 +198,5 @@ function reCalcStats() {
   document.querySelector('#percent').innerHTML = percent.toFixed(2);
   document.querySelector('#known').innerHTML = currentKnown.toFixed(2);
 }
+
+main()

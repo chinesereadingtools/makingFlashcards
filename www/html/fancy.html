@@ -18,6 +18,7 @@
   <script type="text/javascript" src='../js/starsFilter.js'></script>
   <script type="text/javascript" src='../js/markLearnedButton.js'></script>
   <script type="text/javascript" src='../js/spinner.js'></script>
+  <script type="text/javascript" src='../js/tableDefn.js'></script>
 </head>
 
 <body>
@@ -25,22 +26,14 @@
   <div class="wrapper ag-theme-balham-dark" style="height: 100%;">
     <div class="ag-theme-balham-dark" style="margin-bottom: 5px; height: 7%">
       <div id="buttons" style="float:left">
-        <button id="toggleButton" type="button"
-          onclick="toggleMigakuContainer();">Toggle Migaku</button>
-        <button id="parseButton" type="button" onclick="migakuParse();">Migaku
-          Parse</button>
-        <button id="syncButton" type="button" onclick="ankiLoad();">Load Anki
-        </button>
-        <button id="recalc" type="button" onclick="loadFile()">Load all</button>
-        <button id="recalc" type="button" onclick="loadFile(true)">Load well
-          known
-        </button>
-        <button id="saveProgress" type="button" onclick="saveWordList()">Save
-          Progress</button>
+        <button id="toggleButton" type="button">Toggle Migaku</button>
+        <button id="parseButton" type="button">Migaku Parse</button>
+        <button id="syncButton" type="button">Load Anki</button>
+        <button id="loadAll" type="button">Load all</button>
+        <button id="loadKnown" type="button">Load well known </button>
+        <button id="saveProgress" type="button">Save Progress</button>
         </br>
-        <select style="margin-top: 5px;" id="jsonFiles" name="Files"
-          onchange="loadFile()">
-        </select>
+        <select style="margin-top: 5px;" id="jsonFiles" name="Files"></select>
       </div>
       <div id="stats" style="float:right; width:40%">
         <div>Total number of unknown words in 1T sentences:
@@ -53,7 +46,23 @@
         </div>
       </div>
     </div>
-    <div id="myGrid" class="ag-theme-balham-dark"></div>
+
+    <!-- Tab links -->
+    <div class="tab">
+      <button class="tablinks"
+        onclick="openGrid(event, 'sentenceTab')" id="defaultTab">Sentences</button>
+      <button class="tablinks"
+        onclick="openGrid(event, 'wordTab')">Words</button>
+    </div>
+
+    <div id="myGrid">
+      <div id="sentenceTab" class="tabcontent">
+        <div id="sentenceGrid" class="myGrid ag-theme-balham-dark"></div>
+      </div>
+      <div id="wordTab" class="tabcontent">
+        <div id="wordGrid" class="myGrid ag-theme-balham-dark"></div>
+      </div>
+    </div>
   </div>
 
 
