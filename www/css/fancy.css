@@ -1,6 +1,5 @@
 body {
   color: rgba(245, 245, 245, 0.64);
-  /* background-color: #3d4749;*/
   background-color: #202020;
 
 }
@@ -19,10 +18,43 @@ body {
 
 .myGrid {
   width: 100%;
-  height: calc(93% - 5px);
+  height: calc(90% - 5px);
 }
 
 button {
+  display: inline-block;
+  padding: 0.35em 1.2em;
+  border: 0.1em solid #FFFFFF;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 0.12em;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  color: #FFFFFF;
+  background-color: #6712a7;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.tab button {
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  margin: 0;
+  transition: 0.3s;
+  font-size: 17px;
+
+}
+
+.tab button.active {
+  background-color: #ccc;
+
+}
+
+select {
   display: inline-block;
   padding: 0.35em 1.2em;
   border: 0.1em solid #FFFFFF;

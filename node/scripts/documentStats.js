@@ -1,9 +1,8 @@
 const fs = require('fs')
 const known = require("./knownWords.js")
-const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"));
+const wordStats = require("./wordStats.js")
 
-var frequencyData = JSON.parse(fs.readFileSync(
-  config.frequencyData + "Combined.json", "UTF-8", "r"));
+const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"));
 
 function generateStats(segText) {
   wordTable = {}
@@ -33,24 +32,6 @@ function generateStats(segText) {
 
 }
 
-function convertRanking(word) {
-  var rank = frequencyData[word]
-  if (rank == undefined) {
-    return "none"
-  } else if (rank < 1500) {
-    return "★★★★★"
-  } else if (rank < 5000) {
-    return "★★★★"
-  } else if (rank < 15000) {
-    return "★★★"
-  } else if (rank < 30000) {
-    return "★★"
-  } else if (rank < 60000) {
-    return "★"
-  } else {
-    return "none"
-  }
-}
 
 class Document {
   #segText;
@@ -101,7 +82,7 @@ class Document {
     return {
       occurances: occurances,
       percent: occurances / this.totalWords * 100,
-      stars: convertRanking(word),
+      stars: wordStats.frequency(word),
     }
 
   }

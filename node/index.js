@@ -44,11 +44,18 @@ app.post("/exportwords", (req, res, next) => {
 });
 
 app.post("/loadfile", (req, res, next) => {
-  var filename = req.body.name
-  var wellKnown = req.body.wellKnown
+  var filename = req.body.name;
+  var wellKnown = req.body.wellKnown;
   var howKnown = wellKnown ? 20 : 0;
   var parsed = oneTsentences.parse(filename, howKnown)
   res.json(parsed)
+});
+
+app.post("/loadWordList", (req, res, next) => {
+  var filename = req.body.name;
+  var words = knownWords.knownWordsTable(filename);
+  res.json(words)
+
 });
 
 app.get("/saveWordlist", (req, res, next) => {

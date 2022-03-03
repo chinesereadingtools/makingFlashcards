@@ -1,13 +1,15 @@
 async function main() {
   var eGridDiv = document.querySelector('#sentenceGrid')
-  new agGrid.Grid(eGridDiv, globalThis.gridOptions)
+  new agGrid.Grid(eGridDiv, Tables.sentences)
+  var wGridDiv = document.querySelector('#wordGrid')
+  new agGrid.Grid(wGridDiv, Tables.words)
 
   let response = await fetch("/filelist");
   let data = await response.json();
   console.log(data)
   var fileSelector = document.querySelector('#jsonFiles');
 
-  globalThis.gridOptions.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth -
+  Tables.sentences.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth -
     40)
 
   data.forEach((file) => {
@@ -67,7 +69,7 @@ function openGrid(evt, gridName) {
   evt.currentTarget.className += " active";
 
   var eGridDiv = document.querySelector('#sentenceGrid')
-  globalThis.gridOptions.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth -
+  Tables.sentences.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth -
     40)
 } 
 
@@ -149,6 +151,22 @@ async function ankiLoad() {
   });
 }
 
+async function loadWords() {
+
+  var fileSelector = document.querySelector('#jsonFiles');
+  let response = await fetch("/loadWordList", {
+    method: 'POST',
+    headers: {
+      'Content-Type': "application/json;charset=utf-8"
+    },
+    body: JSON.stringify({
+      name: fileSelector.value,
+    })
+  });
+  let data = await response.json();
+  Tables.words.api.setRowData(data);
+}
+
 async function loadFile(wellKnown = false) {
 
   var fileSelector = document.querySelector('#jsonFiles');
@@ -163,12 +181,14 @@ async function loadFile(wellKnown = false) {
       wellKnown: wellKnown
     })
   });
+
   let data = await response.json();
 
   globalThis.wellKnown = wellKnown;
   globalThis.jsonObj = data
   sortRowData(data.rowData)
-  globalThis.gridOptions.api.setRowData(data.rowData)
+  Tables.sentences.api.setRowData(data.rowData)
+  loadWords();
   reCalcStats();
   migakuParse();
 
@@ -179,7 +199,7 @@ function reCalcStats() {
   var wellKnown = globalThis.wellKnown
   var data = globalThis.jsonObj
   var currentWords = {}
-  globalThis.gridOptions.api.forEachNodeAfterFilter((rowNode, index) => {
+  Tables.sentences.api.forEachNodeAfterFilter((rowNode, index) => {
     currentWords[rowNode.data.word] = rowNode.data.occurances
   });
   var words = 0;

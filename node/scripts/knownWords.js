@@ -1,4 +1,6 @@
 const fs = require('fs');
+const wordStats = require("./wordStats.js")
+// const documentStats = require("./documentStats.js")
 
 const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"))
 
@@ -17,6 +19,16 @@ function mergeWords(other) {
   Object.assign(known, other);
 }
 
+function knownWordsTable() {
+  return Object.entries(known).map(([key, value]) => {
+    return {
+      word: key,
+      interval: value,
+      stars: wordStats.frequency(key)
+    }
+  });
+}
+
 // exports various dictionaries
 module.exports = {
   addWord: addWord,
@@ -30,6 +42,7 @@ module.exports = {
     return known[word] >= howKnown;
   },
 
+  knownWordsTable: knownWordsTable,
   knownWords: () => Object.keys(known).length,
   saveWords: saveWords
 

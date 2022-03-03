@@ -1,4 +1,4 @@
-var columnDefs = [{
+var sentenceCols = [{
     headerName: 'Mark',
     field: 'markButton',
     cellRenderer: MarkLearnedRenderer,
@@ -44,25 +44,67 @@ var columnDefs = [{
     wrapText: true,
     autoHeight: true
   },
+]
+
+wordsCols = [{
+    headerName: 'Word',
+    field: 'word',
+    resizable: true,
+    width: 130,
+    filter: WordFilter,
+    suppressSizeToFit: true
+  },
+  {
+    headerName: 'Stars',
+    field: 'stars',
+    sortable: true,
+    width: 160,
+    filter: StarsFilter,
+    suppressSizeToFit: true
+  },
+  {
+    headerName: 'Interval',
+    field: 'interval',
+    resizable: false,
+    sortable: true,
+    width: 160,
+    suppressSizeToFit: true
+  },
 
 ]
 
-globalThis.gridOptions = {
-  columnDefs: columnDefs,
-  rowData: [],
-  rowHeight: 100,
-  //getRowHeight: params => params.
-  rowBuffer: 100,
-  rowSelection: 'multiple',
-  enableCellTextSelection: true,
-  ensureDomOrder: true,
-  suppressColumnVirtualisation: true,
-  suppressRowClickSelection: true,
-  // If these can be ratelimited then reenable
-  // onBodyScrollEnd: (event) => migakuParse(),
-  onSortChanged: (event) => migakuParse(),
-  onFilterChanged: (event) => {
-    reCalcStats();
-    migakuParse();
+var Tables = {
+  sentences: {
+    columnDefs: sentenceCols,
+    rowData: [],
+    rowHeight: 100,
+    //getRowHeight: params => params.
+    rowBuffer: 100,
+    rowSelection: 'multiple',
+    enableCellTextSelection: true,
+    ensureDomOrder: true,
+    suppressColumnVirtualisation: true,
+    suppressRowClickSelection: true,
+    // If these can be ratelimited then reenable
+    // onBodyScrollEnd: (event) => migakuParse(),
+    onSortChanged: (event) => migakuParse(),
+    onFilterChanged: (event) => {
+      reCalcStats();
+      migakuParse();
+    },
   },
+  words: {
+    columnDefs: wordsCols,
+    rowData: [],
+    rowHeight: 100,
+    //getRowHeight: params => params.
+    rowBuffer: 100,
+    rowSelection: 'multiple',
+    enableCellTextSelection: true,
+    ensureDomOrder: true,
+    suppressColumnVirtualisation: true,
+    suppressRowClickSelection: true,
+    // If these can be ratelimited then reenable
+    // onBodyScrollEnd: (event) => migakuParse(),
+  }
 }
