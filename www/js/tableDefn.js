@@ -73,6 +73,41 @@ wordsCols = [{
 
 ]
 
+docWordsCols = [{
+    headerName: 'Word',
+    field: 'word',
+    resizable: true,
+    width: 130,
+    filter: WordFilter,
+    suppressSizeToFit: true
+  },
+  {
+    headerName: 'Stars',
+    field: 'stars',
+    sortable: true,
+    width: 160,
+    filter: StarsFilter,
+    suppressSizeToFit: true
+  },
+  {
+    headerName: 'occurances',
+    field: 'occurances',
+    resizable: false,
+    sortable: true,
+    width: 160,
+    suppressSizeToFit: true
+  },
+  {
+    headerName: 'isKnown',
+    field: 'isKnown',
+    resizable: false,
+    filter: KnownFilter,
+    width: 160,
+    suppressSizeToFit: true
+  },
+
+]
+
 var Tables = {
   sentences: {
     columnDefs: sentenceCols,
@@ -96,13 +131,22 @@ var Tables = {
   words: {
     columnDefs: wordsCols,
     rowData: [],
-    rowHeight: 100,
+    rowHeight: 30,
     //getRowHeight: params => params.
-    rowBuffer: 100,
-    rowSelection: 'multiple',
+    rowBuffer: 20,
     enableCellTextSelection: true,
-    ensureDomOrder: true,
-    suppressColumnVirtualisation: true,
+    suppressRowClickSelection: true,
+    // If these can be ratelimited then reenable
+    // onBodyScrollEnd: (event) => migakuParse(),
+  },
+
+  docWords: {
+    columnDefs: docWordsCols,
+    rowData: [],
+    rowHeight: 30,
+    //getRowHeight: params => params.
+    rowBuffer: 20,
+    enableCellTextSelection: true,
     suppressRowClickSelection: true,
     // If these can be ratelimited then reenable
     // onBodyScrollEnd: (event) => migakuParse(),

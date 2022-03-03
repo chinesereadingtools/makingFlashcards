@@ -1,74 +1,80 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>My Fancy Table</title>
+  <title>Hello, world!</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+  <link rel="stylesheet" type="text/css" href="../css/fancy.css">
+  <link rel="stylesheet" type="text/css" href="../css/spinner.css">
   <script
     src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js">
   </script>
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
-    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link rel="stylesheet" type="text/css" href="../css/fancy.css">
   <link rel="stylesheet"
     href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
   <link rel="stylesheet"
     href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham-dark.css">
+
   <script type="text/javascript" src='../js/starsFilter.js'></script>
   <script type="text/javascript" src='../js/markLearnedButton.js'></script>
   <script type="text/javascript" src='../js/spinner.js'></script>
   <script type="text/javascript" src='../js/tableDefn.js'></script>
+
+
 </head>
 
 <body>
+
   <div id="loader"></div>
-  <div class="wrapper ag-theme-balham-dark" style="height: 100%;">
-    <div id ="toprow" class="ag-theme-balham-dark" >
-      <div id="buttons" style="float:left">
+  <div class="wrapper">
+    <div class="header">
+      <div id="buttons">
         <button id="toggleButton" type="button">Toggle Migaku</button>
         <button id="parseButton" type="button">Migaku Parse</button>
         <button id="syncButton" type="button">Sync Anki</button>
         <button id="saveProgress" type="button">Save Progress</button>
-        <select style="margin-top: 5px;" id="jsonFiles" name="Files"></select>
+        <select style="margin-top: 5px;" id="jsonFiles" name="Files">
+        </select>
         <button id="loadAll" type="button">Load all</button>
         <button id="loadKnown" type="button">Load well known </button>
       </div>
     </div>
-
-    <!-- Tab links -->
-    <div class="tab">
-      <button class="tablinks"
-        onclick="openGrid(event, 'sentenceTab')" id="defaultTab">Sentences</button>
-      <button class="tablinks"
-        onclick="openGrid(event, 'wordTab')">Words</button>
-
-      <div id="stats" style="float:right; width:40%">
-        <div>Total number of unknown words in 1T sentences:
-          <span id="oneTwords"> </span>
-          (Currently know <span id="known"></span>% of the book)
-        </div>
-        <div>Total number of occurances covered:
-          <span id="occurances"> </span>
-          (<span id="percent"></span>% of the total book)
-        </div>
+    <div class="tabs">
+      <div class="tab">
+        <button class="tablinks" onclick="openGrid(event, 'sentenceTab')"
+          id="defaultTab">Sentences</button>
+        <button class="tablinks"
+          onclick="openGrid(event, 'wordTab')">Words</button>
       </div>
     </div>
+    <div class="content">
 
-    <div id="myGrid">
-      <div id="sentenceTab" class="tabcontent">
-        <div id="sentenceGrid" class="myGrid ag-theme-balham-dark"></div>
+      <div class="content">
+        <div id="sentenceTab" class="content tabcontent">
+          <div id="sentenceGrid" class="content ag-theme-balham-dark"></div>
+        </div>
+        <div id="wordTab" class="content-row tabcontent">
+          <div id="wordGrid" class="halfGrid ag-theme-balham-dark"></div>
+          <div id="docWordGrid" class="halfGrid ag-theme-balham-dark"></div>
+        </div>
       </div>
-      <div id="wordTab" class="tabcontent">
-        <div id="wordGrid" class="myGrid ag-theme-balham-dark"></div>
+      <div class="footer">
+
+        <div id="stats">
+          <div>Total number of unknown words in 1T sentences:
+            <span id="oneTwords"> </span>
+            (Currently know <span id="known"></span>% of the book)
+          </div>
+          <div>Total number of occurances covered:
+            <span id="occurances"> </span>
+            (<span id="percent"></span>% of the total book)
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+      <div>
 
-
-  <script type="text/javascript" src='../js/fancyCode.js'></script>
-
+        <script type="text/javascript" src='../js/fancyCode.js'></script>
 </body>
-
 
 </html>

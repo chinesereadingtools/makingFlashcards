@@ -8,6 +8,7 @@ const app = express()
 const oneTsentences = require("./scripts/oneTsentences.js")
 const importFromAnki = require("./scripts/importFromAnki.js")
 const knownWords = require("./scripts/knownWords.js")
+const documentStats = require("./scripts/documentStats.js")
 
 const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"))
 
@@ -51,12 +52,18 @@ app.post("/loadfile", (req, res, next) => {
   res.json(parsed)
 });
 
-app.post("/loadWordList", (req, res, next) => {
+app.post("/getDocumentWords", (req, res, next) => {
   var filename = req.body.name;
-  var words = knownWords.knownWordsTable(filename);
-  res.json(words)
-
+  var words = knownWords.knownWordsTable();
+  var document = new documentStats.Document(filename);
+  res.json(document.documentWords())
 });
+
+app.post("/getKnownWords", (req, res, next) => {
+  var words = knownWords.knownWordsTable();
+  res.json(words)
+});
+
 
 app.get("/saveWordlist", (req, res, next) => {
   // todo, do a callback promise or smth

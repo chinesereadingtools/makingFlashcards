@@ -39,6 +39,50 @@ class StarsFilter {
   }
 }
 
+class KnownFilter {
+  init(params) {
+    this.eGui = document.createElement('div');
+    this.eGui.innerHTML = `<div style="display: inline-block;">
+      <input class='knownRadio' type='radio' name='known' value='all' checked>
+      <lable>show all</lable>
+      <input class='knownRadio' type='radio' name='known' value='known'>
+      <lable>show known</lable>
+      <input class='knownRadio' type='radio' name='known' value='unknown'>
+      <lable>show unknown</lable>
+    </div>`;
+    this.radios = this.eGui.querySelectorAll("[name='known']");
+    this.radios.forEach(radio => {
+      radio.addEventListener('change', event => {
+        this.onChanged(radio);
+      });
+    });
+    this.filterActive = false;
+    this.value = 'all'
+    this.filterChangedCallback = params.filterChangedCallback;
+  }
+
+  onChanged(radio) {
+    this.value = radio.value;
+    this.filterChangedCallback();
+  }
+
+  getGui() {
+    return this.eGui;
+  }
+
+  doesFilterPass(params) {
+    if (this.value == 'known') { 
+      return params.data.isKnown;
+    } else {
+      return !params.data.isKnown;
+    }
+  }
+
+  isFilterActive() {
+    return this.value != 'all';
+  }
+}
+
 
 class WordFilter {
   init(params) {

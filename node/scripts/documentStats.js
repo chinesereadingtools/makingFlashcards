@@ -67,6 +67,22 @@ class Document {
     return this.#segText
   };
 
+  inDocument(word) {
+    return word in this.wordTable;
+  }
+
+  documentWords() {
+    return Object.entries(this.wordTable).map(([word, occurances]) => {
+      return {
+        word: word,
+        occurances: occurances,
+        isKnown: known.isKnown(word),
+        stars: wordStats.frequency(word),
+      };
+    });
+
+  }
+
   documentStats() {
     return {
       totalWords: this.totalWords,

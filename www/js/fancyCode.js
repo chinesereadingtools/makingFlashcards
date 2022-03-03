@@ -3,6 +3,8 @@ async function main() {
   new agGrid.Grid(eGridDiv, Tables.sentences)
   var wGridDiv = document.querySelector('#wordGrid')
   new agGrid.Grid(wGridDiv, Tables.words)
+  var dGridDiv = document.querySelector('#docWordGrid')
+  new agGrid.Grid(dGridDiv, Tables.docWords)
 
   let response = await fetch("/filelist");
   let data = await response.json();
@@ -65,13 +67,13 @@ function openGrid(evt, gridName) {
   // Show the current tab, and add an "active" class to the button that opened the tab
   var contents = document.getElementById(gridName)
   console.log(contents)
-  document.getElementById(gridName).style.display = "block";
+  document.getElementById(gridName).style.display = "";
   evt.currentTarget.className += " active";
 
   var eGridDiv = document.querySelector('#sentenceGrid')
   Tables.sentences.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth -
     40)
-} 
+}
 
 function sortRowData(rowData) {
   rowData.sort((x, y) => {
@@ -151,10 +153,24 @@ async function ankiLoad() {
   });
 }
 
-async function loadWords() {
+async function loadKnownWords() {
+
+  let response = await fetch("/getKnownWords", {
+    method: 'POST',
+    headers: {
+      'Content-Type': "application/json;charset=utf-8"
+    },
+    body: JSON.stringify({})
+  });
+  let data = await response.json();
+  Tables.words.api.setRowData(data);
+
+}
+
+async function loadDocumentWords() {
 
   var fileSelector = document.querySelector('#jsonFiles');
-  let response = await fetch("/loadWordList", {
+  let response = await fetch("/getDocumentWords", {
     method: 'POST',
     headers: {
       'Content-Type': "application/json;charset=utf-8"
@@ -164,7 +180,8 @@ async function loadWords() {
     })
   });
   let data = await response.json();
-  Tables.words.api.setRowData(data);
+  Tables.docWords.api.setRowData(data);
+
 }
 
 async function loadFile(wellKnown = false) {
@@ -188,7 +205,8 @@ async function loadFile(wellKnown = false) {
   globalThis.jsonObj = data
   sortRowData(data.rowData)
   Tables.sentences.api.setRowData(data.rowData)
-  loadWords();
+  loadKnownWords();
+  loadDocumentWords();
   reCalcStats();
   migakuParse();
 
