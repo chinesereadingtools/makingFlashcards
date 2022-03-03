@@ -16,10 +16,16 @@ body {
   font-size: 25px;
 }
 
+#toprow {
+  margin-bottom: 5px;
+  height: 5%
+}
+
 .myGrid {
   width: 100%;
-  height: calc(90% - 5px);
+  height: calc(95% - 5px);
 }
+
 
 button {
   display: inline-block;
@@ -35,6 +41,18 @@ button {
   background-color: #6712a7;
   text-align: center;
   transition: all 0.2s;
+}
+
+button:hover {
+  color: #000000;
+  background-color: #FFFFFF;
+}
+
+@media all and (max-width:30em) {
+  button {
+    display: block;
+    margin: 0.4em auto;
+  }
 }
 
 .tab button {
@@ -54,12 +72,28 @@ button {
 
 }
 
+.markLearned {
+  margin: 0;
+  font-weight: 900;
+  background-color: #d91a1a;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 900;
+  padding: 5;
+  border-radius: 1.12em;
+}
+
+button.markLearned:hover{
+  background-color: #18a30f;
+}
+
 select {
   display: inline-block;
   padding: 0.35em 1.2em;
   border: 0.1em solid #FFFFFF;
   margin: 0 0.3em 0.3em 0;
-  border-radius: 0.12em;
+  border-radius: 1.12em;
   box-sizing: border-box;
   text-decoration: none;
   font-family: 'Roboto', sans-serif;
@@ -69,17 +103,6 @@ select {
   transition: all 0.2s;
 }
 
-button:hover {
-  color: #000000;
-  background-color: #FFFFFF;
-}
-
-@media all and (max-width:30em) {
-  button {
-    display: block;
-    margin: 0.4em auto;
-  }
-}
 
 #loader {
   display: none;
@@ -124,13 +147,6 @@ button:hover {
     bottom: 0;
     opacity: 1
   }
-}
-
-.vertical-center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 /* Style the tab */

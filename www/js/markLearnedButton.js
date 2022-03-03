@@ -3,7 +3,7 @@ class MarkLearnedRenderer {
   init(params) {
     this.eGui = document.createElement('button');
     this.eGui.innerHTML = 'X';
-    this.eGui.classList.add('vertical-center');
+    this.eGui.classList.add('markLearned');
     this.eventListener = () => {
       var row = params.node.data
       exportWords([row])
