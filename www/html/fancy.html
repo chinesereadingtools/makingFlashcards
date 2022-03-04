@@ -28,8 +28,14 @@
 
   <div id="loader"></div>
   <div class="wrapper">
-    <div class="header">
-      <div id="buttons">
+    <div class="header tabs">
+      <div class="tab">
+        <button class="tablinks tab" onclick="openGrid(event, 'sentenceTab')"
+          id="defaultTab">Sentences</button>
+        <button class="tablinks tab"
+          onclick="openGrid(event, 'wordTab')">Words</button>
+
+        <div style="float:right">
         <button id="toggleButton" type="button">Toggle Migaku</button>
         <button id="parseButton" type="button">Migaku Parse</button>
         <button id="syncButton" type="button">Sync Anki</button>
@@ -38,14 +44,7 @@
         </select>
         <button id="loadAll" type="button">Load all</button>
         <button id="loadKnown" type="button">Load well known </button>
-      </div>
-    </div>
-    <div class="tabs">
-      <div class="tab">
-        <button class="tablinks" onclick="openGrid(event, 'sentenceTab')"
-          id="defaultTab">Sentences</button>
-        <button class="tablinks"
-          onclick="openGrid(event, 'wordTab')">Words</button>
+        </div>
       </div>
     </div>
     <div class="content">

@@ -70,9 +70,6 @@ function openGrid(evt, gridName) {
   document.getElementById(gridName).style.display = "";
   evt.currentTarget.className += " active";
 
-  var eGridDiv = document.querySelector('#sentenceGrid')
-  Tables.sentences.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth -
-    40)
 }
 
 function sortRowData(rowData) {
