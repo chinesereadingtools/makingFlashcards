@@ -128,7 +128,8 @@ button.tab {
   outline: none;
   cursor: pointer;
   padding: 7px 10px;
-  margin: 0;
+  margin: 5px 0 0 0;
+  width: 200px;
   transition: 0.3s;
   font-size: 17px;
   border-radius: 15px 15px 0px 0px;
