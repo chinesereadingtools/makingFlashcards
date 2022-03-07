@@ -74,6 +74,14 @@ wordsCols = [{
 ]
 
 docWordsCols = [{
+    headerName: 'Mark',
+    field: 'markButton',
+    cellRenderer: MarkLearnedRenderer,
+    resizable: false,
+    width: 50,
+    suppressSizeToFit: true
+  },
+  {
     headerName: 'Word',
     field: 'word',
     resizable: true,

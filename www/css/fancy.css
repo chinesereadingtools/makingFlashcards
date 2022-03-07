@@ -62,7 +62,7 @@ body {
 .halfGrid {
   display: flex;
   flex-flow: column;
-  flex: 0 1 30%;
+  flex: 0 1 40%;
   align-content: space-between;
 }
 
