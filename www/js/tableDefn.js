@@ -58,7 +58,7 @@ wordsCols = [{
     headerName: 'Stars',
     field: 'stars',
     sortable: true,
-    width: 160,
+    width: 200,
     filter: StarsFilter,
     suppressSizeToFit: true
   },
@@ -93,16 +93,16 @@ docWordsCols = [{
     headerName: 'Stars',
     field: 'stars',
     sortable: true,
-    width: 160,
+    width: 200,
     filter: StarsFilter,
     suppressSizeToFit: true
   },
   {
-    headerName: 'occurances',
+    headerName: '#',
     field: 'occurances',
     resizable: false,
     sortable: true,
-    width: 160,
+    width: 80,
     suppressSizeToFit: true
   },
   {
@@ -132,14 +132,14 @@ var Tables = {
     // onBodyScrollEnd: (event) => migakuParse(),
     onSortChanged: (event) => migakuParse(),
     onFilterChanged: (event) => {
-      reCalcStats();
+      reCalcSentenceStats();
       migakuParse();
     },
   },
   words: {
     columnDefs: wordsCols,
     rowData: [],
-    rowHeight: 30,
+    rowHeight: 50,
     //getRowHeight: params => params.
     rowBuffer: 20,
     enableCellTextSelection: true,
@@ -151,7 +151,7 @@ var Tables = {
   docWords: {
     columnDefs: docWordsCols,
     rowData: [],
-    rowHeight: 30,
+    rowHeight: 50,
     //getRowHeight: params => params.
     rowBuffer: 20,
     enableCellTextSelection: true,

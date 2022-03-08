@@ -22,7 +22,7 @@ app.get("/hello", (req, res, next) => {
 })
 
 app.get("/filelist", (req, res, next) => {
-  fs.readdir(config.parsedSentences, (err, files) => {
+  fs.readdir(config.segmentedText, (err, files) => {
     var jsonFiles = files.filter((elem) => {
       return elem.endsWith(".json")
     });
@@ -37,9 +37,11 @@ app.post("/exportwords", (req, res, next) => {
   fs.appendFile(config.exportedWords,
     words.join("\n") + "\n",
     (err) => {
+      var myWords = knownWords.knownWordsTable();
       res.json({
         success: err,
-        totalWords: knownWords.knownWords()
+        totalWords: knownWords.knownWords(),
+        words:myWords,
       });
     });
 });
@@ -48,14 +50,19 @@ app.post("/loadfile", (req, res, next) => {
   var filename = req.body.name;
   var wellKnown = req.body.wellKnown;
   var howKnown = wellKnown ? 20 : 0;
-  var parsed = oneTsentences.parse(filename, howKnown)
-  res.json(parsed)
+
+  console.log(`Loading ${filename}`)
+  var document = new documentStats.Document(filename);
+  var documentWords = document.documentWords();
+  var parsed = oneTsentences.parse(document, howKnown)
+  res.json({
+    sentences: parsed,
+    docWords: documentWords
+  })
 });
 
 app.post("/getDocumentWords", (req, res, next) => {
   var filename = req.body.name;
-  var words = knownWords.knownWordsTable();
-  var document = new documentStats.Document(filename);
   res.json(document.documentWords())
 });
 

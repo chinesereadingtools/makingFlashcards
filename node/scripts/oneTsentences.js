@@ -35,10 +35,7 @@ function toText(sentence) {
   return sentence.map(([word, type]) => word).join("");
 }
 
-function parseFile(filename, howKnown) {
-
-  console.log(`Loading ${filename}`)
-  var document = new documentStats.Document(filename)
+function parseFile(document, howKnown) {
   var segText = document.text
 
   var oneT = []

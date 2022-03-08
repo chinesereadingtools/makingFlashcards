@@ -8,7 +8,6 @@ async function main() {
 
   let response = await fetch("/filelist");
   let data = await response.json();
-  console.log(data)
   var fileSelector = document.querySelector('#jsonFiles');
 
   Tables.sentences.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth -
@@ -21,11 +20,6 @@ async function main() {
     fileSelector.appendChild(opt);
   });
 
-  loadFile()
-  setTimeout(() => {
-      migakuParse()
-    },
-    3000);
 
   document.querySelector('#toggleButton').addEventListener('click',
     toggleMigakuContainer);
@@ -42,16 +36,29 @@ async function main() {
   document.querySelector('#jsonFiles').addEventListener('change',
     () => loadFile(false));
 
+  document.querySelectorAll('.tablinks').forEach((target) => {
+    target.addEventListener('click',
+      (event) => openGrid(target)
+    )
+  });
+
   document.getElementById("defaultTab").click();
+
+  await loadFile()
+  await loadKnownWords()
+  setTimeout(() => {
+      migakuParse()
+    },
+    3000);
 
 }
 
 
 
-function openGrid(evt, gridName) {
+function openGrid(button) {
   // Declare all variables
+  var gridName = button.getAttribute('target')
   var i, tabcontent, tablinks;
-
   // Get all elements with class="tabcontent" and hide them
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
@@ -66,10 +73,9 @@ function openGrid(evt, gridName) {
 
   // Show the current tab, and add an "active" class to the button that opened the tab
   var contents = document.getElementById(gridName)
-  console.log(contents)
   document.getElementById(gridName).style.display = "";
-  evt.currentTarget.className += " active";
-
+  button.className += " active";
+  migakuParse();
 }
 
 function sortRowData(rowData) {
@@ -103,6 +109,10 @@ async function exportWords(rows) {
       })
     });
     let obj = await contents.json()
+    Tables.words.data = obj.words;
+    Tables.words.api.setRowData(obj.words);
+    reCalcWordStats();
+
     console.log(
       `Exported words ${words.join(',')} now know ${obj.totalWords} total words`
     )
@@ -151,7 +161,6 @@ async function ankiLoad() {
 }
 
 async function loadKnownWords() {
-
   let response = await fetch("/getKnownWords", {
     method: 'POST',
     headers: {
@@ -160,24 +169,9 @@ async function loadKnownWords() {
     body: JSON.stringify({})
   });
   let data = await response.json();
+  Tables.words.data = data
   Tables.words.api.setRowData(data);
-
-}
-
-async function loadDocumentWords() {
-
-  var fileSelector = document.querySelector('#jsonFiles');
-  let response = await fetch("/getDocumentWords", {
-    method: 'POST',
-    headers: {
-      'Content-Type': "application/json;charset=utf-8"
-    },
-    body: JSON.stringify({
-      name: fileSelector.value,
-    })
-  });
-  let data = await response.json();
-  Tables.docWords.api.setRowData(data);
+  reCalcWordStats();
 
 }
 
@@ -198,21 +192,26 @@ async function loadFile(wellKnown = false) {
 
   let data = await response.json();
 
-  globalThis.wellKnown = wellKnown;
-  globalThis.jsonObj = data
-  sortRowData(data.rowData)
-  Tables.sentences.api.setRowData(data.rowData)
-  loadKnownWords();
-  loadDocumentWords();
-  reCalcStats();
-  migakuParse();
+  var sentences = data.sentences;
+  var words = data.docWords;
 
+  Tables.sentences.data = sentences
+  Tables.docWords.data = words
+  Tables.sentences.data.wellKnown = wellKnown;
+  sortRowData(sentences.rowData)
+  Tables.sentences.api.setRowData(sentences.rowData)
+  Tables.docWords.api.setRowData(words);
+
+  reCalcSentenceStats()
+  return
 }
 
-
-function reCalcStats() {
-  var wellKnown = globalThis.wellKnown
-  var data = globalThis.jsonObj
+function reCalcSentenceStats() {
+  var data = Tables.sentences.data
+  if (data == undefined) {
+    return;
+  }
+  var wellKnown = data.wellKnown
   var currentWords = {}
   Tables.sentences.api.forEachNodeAfterFilter((rowNode, index) => {
     currentWords[rowNode.data.word] = rowNode.data.occurances
@@ -227,11 +226,37 @@ function reCalcStats() {
   var percent = occurances / data.totalWords * 100;
 
   var currentKnown = !wellKnown ? data.currentWellKnown : data.currentKnown
-
   document.querySelector('#oneTwords').innerHTML = words;
   document.querySelector('#occurances').innerHTML = occurances;
   document.querySelector('#percent').innerHTML = percent.toFixed(2);
   document.querySelector('#known').innerHTML = currentKnown.toFixed(2);
+  var bookWords = Tables.docWords.data.length
+  var knownBookWords = Tables.docWords.data.filter(entry => entry.isKnown)
+    .length
+  document.querySelector('#bookWords').innerHTML = bookWords;
+  document.querySelector('#knownBookWords').innerHTML = knownBookWords;
 }
+
+function reCalcWordStats() {
+  var totalWords = Tables.words.data.length
+  document.querySelector('#totalWords').innerHTML = totalWords;
+}
+
+// Prevent migaku empty spans from messing stuff up
+const observer = new MutationObserver(mutations_list => {
+  mutations_list.forEach(mutation => {
+    mutation.addedNodes.forEach(added_node => {
+      if (added_node.innerText == '' && added_node.nodeName ==
+        'SPAN') {
+        added_node.remove()
+      }
+    });
+  });
+});
+observer.observe(document.querySelector('body'), {
+  subtree: true,
+  childList: true
+});
+
 
 main()

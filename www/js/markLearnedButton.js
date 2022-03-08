@@ -16,6 +16,7 @@ class MarkLearnedRenderer {
       const filterInstance = Tables.sentences.api.getFilterInstance(
         'word');
       filterInstance.addWord(rowData.word);
+      reCalcWordStats();
     }
     this.eGui.addEventListener('click', this.eventListener);
   }

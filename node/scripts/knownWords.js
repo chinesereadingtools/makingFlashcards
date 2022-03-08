@@ -4,14 +4,17 @@ const wordStats = require("./wordStats.js")
 const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"))
 
 var known = JSON.parse(fs.readFileSync(
-  config.knownWords, "UTF-8", "r"));
+  config.knownWordsJson, "UTF-8", "r"));
 
 function addWord(word, age) {
   known[word] = age;
 }
 
 function saveWords(callback) {
-  fs.writeFile(config.knownWords, JSON.stringify(known), callback);
+  fs.writeFile(config.knownWordsJson, JSON.stringify(known), (err) => {
+    words = Object.keys(known);
+    fs.writeFile(config.knownWords, words.join("\n"), callback);
+  });
 }
 
 function mergeWords(other) {

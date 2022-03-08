@@ -11,10 +11,14 @@ body {
   display: none;
 }
 
-#sentenceGrid,
+#sentenceGrid {
+  font-size: 25px;
+
+}
+
 #wordGrid,
 #docWordGrid {
-  font-size: 25px;
+  font-size: 30px;
 }
 
 .wrapper {
@@ -41,30 +45,34 @@ body {
   overflow-y: auto;
 }
 
-.wrapper .content-row {
-  display: flex;
+.myGrid {
   height: 100%;
-  justify-content: space-between;
 }
 
-.myGrid {
-  flex-flow: column;
-  flex: 1 1 auto;
-  overflow-y: auto;
-  display: flex;
+#stats {
+  display: inline;
+  float: left;
+}
 
+#wordStats {
+  display: inline;
+  float: right;
+}
+
+.halfGrid {
+  display: inline-block;
+  height: 100%;
+  width: 40%;
+}
+
+.wrapper .content-row {
+  height: 100%;
 }
 
 .tabcontent {
   width: 100%;
 }
 
-.halfGrid {
-  display: flex;
-  flex-flow: column;
-  flex: 0 1 40%;
-  align-content: space-between;
-}
 
 .wrapper .footer {
   flex: 0 1 40px;
