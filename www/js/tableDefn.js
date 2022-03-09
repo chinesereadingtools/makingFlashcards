@@ -139,7 +139,7 @@ var Tables = {
   words: {
     columnDefs: wordsCols,
     rowData: [],
-    rowHeight: 50,
+    rowHeight: 60,
     //getRowHeight: params => params.
     rowBuffer: 20,
     enableCellTextSelection: true,
@@ -151,7 +151,7 @@ var Tables = {
   docWords: {
     columnDefs: docWordsCols,
     rowData: [],
-    rowHeight: 50,
+    rowHeight: 60,
     //getRowHeight: params => params.
     rowBuffer: 20,
     enableCellTextSelection: true,
