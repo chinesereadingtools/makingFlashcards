@@ -41,7 +41,7 @@ app.post("/exportwords", (req, res, next) => {
       res.json({
         success: err,
         totalWords: knownWords.knownWords(),
-        words:myWords,
+        words: myWords,
       });
     });
 });
@@ -68,7 +68,10 @@ app.post("/getDocumentWords", (req, res, next) => {
 
 app.post("/getKnownWords", (req, res, next) => {
   var words = knownWords.knownWordsTable();
-  res.json(words)
+  res.json({
+    words: words,
+    knownCharacters: knownWords.knownCharacters()
+  });
 });
 
 

@@ -5,6 +5,10 @@ const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"))
 
 var known = JSON.parse(fs.readFileSync(
   config.knownWordsJson, "UTF-8", "r"));
+var knownCharacters = new Set();
+Object.keys(known).forEach(word => {
+  Array.from(word).forEach(ch => knownCharacters.add(ch));
+});
 
 function addWord(word, age) {
   known[word] = age;
@@ -31,6 +35,10 @@ function knownWordsTable() {
   });
 }
 
+function numKnownCharacters() {
+  return knownCharacters.size;
+}
+
 // exports various dictionaries
 module.exports = {
   addWord: addWord,
@@ -46,6 +54,7 @@ module.exports = {
 
   knownWordsTable: knownWordsTable,
   knownWords: () => Object.keys(known).length,
-  saveWords: saveWords
+  saveWords: saveWords,
+  knownCharacters: numKnownCharacters,
 
 }

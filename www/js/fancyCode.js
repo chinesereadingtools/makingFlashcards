@@ -169,8 +169,10 @@ async function loadKnownWords() {
     body: JSON.stringify({})
   });
   let data = await response.json();
-  Tables.words.data = data
-  Tables.words.api.setRowData(data);
+
+  Tables.words.data = data.words;
+  Tables.words.knownCharacters = data.knownCharacters;
+  Tables.words.api.setRowData(data.words);
   reCalcWordStats();
 
 }
@@ -238,8 +240,10 @@ function reCalcSentenceStats() {
 }
 
 function reCalcWordStats() {
-  var totalWords = Tables.words.data.length
+  var totalWords = Tables.words.data.length;
+  var knownCharacters = Tables.words.knownCharacters;
   document.querySelector('#totalWords').innerHTML = totalWords;
+  document.querySelector('#totalCharacters').innerHTML = knownCharacters;
 }
 
 // Prevent migaku empty spans from messing stuff up
