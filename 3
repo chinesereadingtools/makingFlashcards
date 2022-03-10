@@ -1,72 +1,38 @@
-function override(dictA, dictB) {
+function starsColumn(width) {
   return {
-    ...dictA,
-    ...dictB
-  }
-}
-
-function starsColumn(other) {
-  return override({
     headerName: 'Stars',
     field: 'stars',
-    width: 200,
+    width: width,
     filter: StarsFilter,
     suppressSizeToFit: true
-  }, other);
-}
+  },
 
-function markLearnedColumn(other) {
-  return override({
-      headerName: 'Mark',
-      field: 'markButton',
-      cellRenderer: MarkLearnedRenderer,
-      resizable: false,
-      width: 50,
-      suppressSizeToFit: true
-    },
-    other);
 }
-
-function wordColumn() {
-  return {
+var sentenceCols = [{
+    headerName: 'Mark',
+    field: 'markButton',
+    cellRenderer: MarkLearnedRenderer,
+    resizable: false,
+    width: 50,
+    suppressSizeToFit: true
+  },
+  {
     headerName: 'Word',
     field: 'word',
     resizable: true,
     width: 130,
     filter: WordFilter,
     suppressSizeToFit: true
-  }
-}
-
-function occuranceColumn(other) {
-  return override({
+  },
+  {
     headerName: '#',
     field: 'occurances',
     sortable: true,
     width: 100,
     filter: 'agNumberColumnFilter',
     suppressSizeToFit: true
-  }, other);
-}
-
-function isKnownColumn(other) {
-  return override({
-    headerName: 'isKnown',
-    field: 'isKnown',
-    resizable: false,
-    filter: KnownFilter,
-    width: 160,
-    suppressSizeToFit: true
-  }, other);
-}
-
-var sentenceCols = [
-  markLearnedColumn(),
-  wordColumn(),
-  occuranceColumn(),
-  starsColumn({
-    width: 160
-  }),
+  },
+  starsColumn(160),
   {
     headerName: 'Pos',
     field: 'position',
@@ -83,9 +49,22 @@ var sentenceCols = [
   },
 ]
 
-wordsCols = [
-  wordColumn(),
-  starsColumn(),
+wordsCols = [{
+    headerName: 'Word',
+    field: 'word',
+    resizable: true,
+    width: 130,
+    filter: WordFilter,
+    suppressSizeToFit: true
+  },
+  {
+    headerName: 'Stars',
+    field: 'stars',
+    sortable: true,
+    width: 200,
+    filter: StarsFilter,
+    suppressSizeToFit: true
+  },
   {
     headerName: 'Interval',
     field: 'interval',
@@ -97,32 +76,47 @@ wordsCols = [
 
 ]
 
-docWordsCols = [
-  markLearnedColumn(),
-  wordColumn(),
-  starsColumn(),
-  occuranceColumn({
-    width: 80
-  }),
-  isKnownColumn()
-]
+docWordsCols = [{
+    headerName: 'Mark',
+    field: 'markButton',
+    cellRenderer: MarkLearnedRenderer,
+    resizable: false,
+    width: 50,
+    suppressSizeToFit: true
+  },
+  {
+    headerName: 'Word',
+    field: 'word',
+    resizable: true,
+    width: 130,
+    filter: WordFilter,
+    suppressSizeToFit: true
+  },
+  {
+    headerName: 'Stars',
+    field: 'stars',
+    sortable: true,
+    width: 200,
+    filter: StarsFilter,
+    suppressSizeToFit: true
+  },
+  {
+    headerName: '#',
+    field: 'occurances',
+    resizable: false,
+    sortable: true,
+    width: 80,
+    suppressSizeToFit: true
+  },
+  {
+    headerName: 'isKnown',
+    field: 'isKnown',
+    resizable: false,
+    filter: KnownFilter,
+    width: 160,
+    suppressSizeToFit: true
+  },
 
-charCols = [
-  wordColumn(),
-  occuranceColumn({
-    width: 80
-  }),
-  isKnownColumn({
-    headerName: 'Alone',
-  }),
-]
-
-docCharCols = [
-  wordColumn(),
-  occuranceColumn({
-    width: 80
-  }),
-  isKnownColumn()
 ]
 
 var Tables = {
@@ -130,7 +124,6 @@ var Tables = {
     columnDefs: sentenceCols,
     rowData: [],
     rowHeight: 100,
-    // todo, predict height based on number of characters in sentence
     //getRowHeight: params => params.
     rowBuffer: 100,
     rowSelection: 'multiple',
@@ -150,32 +143,23 @@ var Tables = {
     columnDefs: wordsCols,
     rowData: [],
     rowHeight: 60,
+    //getRowHeight: params => params.
     rowBuffer: 20,
     enableCellTextSelection: true,
     suppressRowClickSelection: true,
+    // If these can be ratelimited then reenable
+    // onBodyScrollEnd: (event) => migakuParse(),
   },
+
   docWords: {
     columnDefs: docWordsCols,
     rowData: [],
     rowHeight: 60,
+    //getRowHeight: params => params.
     rowBuffer: 20,
     enableCellTextSelection: true,
     suppressRowClickSelection: true,
-  },
-  chars: {
-    columnDefs: charCols,
-    rowData: [],
-    rowHeight: 60,
-    rowBuffer: 20,
-    enableCellTextSelection: true,
-    suppressRowClickSelection: true,
-  },
-  docChars: {
-    columnDefs: docCharCols,
-    rowData: [],
-    rowHeight: 60,
-    rowBuffer: 20,
-    enableCellTextSelection: true,
-    suppressRowClickSelection: true,
+    // If these can be ratelimited then reenable
+    // onBodyScrollEnd: (event) => migakuParse(),
   }
 }

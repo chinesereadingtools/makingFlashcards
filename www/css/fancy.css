@@ -17,8 +17,15 @@ body {
 }
 
 #wordGrid,
-#docWordGrid {
+#docWordGrid,
+#charGrid,
+#docCharGrid {
   font-size: 30px;
+}
+
+.statsTable {
+  display: inline;
+  float: right;
 }
 
 .wrapper {
@@ -137,7 +144,7 @@ button.tab {
   cursor: pointer;
   padding: 7px 10px;
   margin: 5px 0 0 0;
-  width: 200px;
+  width: 180px;
   transition: 0.3s;
   font-size: 17px;
   border-radius: 15px 15px 0px 0px;

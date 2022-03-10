@@ -71,7 +71,7 @@ class KnownFilter {
   }
 
   doesFilterPass(params) {
-    if (this.value == 'known') { 
+    if (this.value == 'known') {
       return params.data.isKnown;
     } else {
       return !params.data.isKnown;
@@ -82,7 +82,6 @@ class KnownFilter {
     return this.value != 'all';
   }
 }
-
 
 class WordFilter {
   init(params) {

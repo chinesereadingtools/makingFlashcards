@@ -54,23 +54,21 @@ app.post("/loadfile", (req, res, next) => {
   console.log(`Loading ${filename}`)
   var document = new documentStats.Document(filename);
   var documentWords = document.documentWords();
+  var documentChars = document.documentChars();
   var parsed = oneTsentences.parse(document, howKnown)
   res.json({
     sentences: parsed,
-    docWords: documentWords
+    docWords: documentWords,
+    chars: documentChars
   })
-});
-
-app.post("/getDocumentWords", (req, res, next) => {
-  var filename = req.body.name;
-  res.json(document.documentWords())
 });
 
 app.post("/getKnownWords", (req, res, next) => {
   var words = knownWords.knownWordsTable();
+  var chars = knownWords.knownCharsTable();
   res.json({
     words: words,
-    knownCharacters: knownWords.knownCharacters()
+    chars: chars,
   });
 });
 

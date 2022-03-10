@@ -5,6 +5,10 @@ async function main() {
   new agGrid.Grid(wGridDiv, Tables.words)
   var dGridDiv = document.querySelector('#docWordGrid')
   new agGrid.Grid(dGridDiv, Tables.docWords)
+  var dcGridDiv = document.querySelector('#docCharGrid')
+  new agGrid.Grid(dcGridDiv, Tables.docChars)
+  var cGridDiv = document.querySelector('#charGrid')
+  new agGrid.Grid(cGridDiv, Tables.chars)
 
   let response = await fetch("/filelist");
   let data = await response.json();
@@ -170,9 +174,13 @@ async function loadKnownWords() {
   });
   let data = await response.json();
 
-  Tables.words.data = data.words;
-  Tables.words.knownCharacters = data.knownCharacters;
-  Tables.words.api.setRowData(data.words);
+  var words = data.words;
+  var chars = data.chars;
+
+  Tables.words.data = words;
+  Tables.words.api.setRowData(words);
+  Tables.chars.data = chars;
+  Tables.chars.api.setRowData(chars);
   reCalcWordStats();
 
 }
@@ -196,6 +204,7 @@ async function loadFile(wellKnown = false) {
 
   var sentences = data.sentences;
   var words = data.docWords;
+  var chars = data.chars;
 
   Tables.sentences.data = sentences
   Tables.docWords.data = words
@@ -203,6 +212,7 @@ async function loadFile(wellKnown = false) {
   sortRowData(sentences.rowData)
   Tables.sentences.api.setRowData(sentences.rowData)
   Tables.docWords.api.setRowData(words);
+  Tables.docChars.api.setRowData(chars);
 
   reCalcSentenceStats()
   return
@@ -241,7 +251,7 @@ function reCalcSentenceStats() {
 
 function reCalcWordStats() {
   var totalWords = Tables.words.data.length;
-  var knownCharacters = Tables.words.knownCharacters;
+  var knownCharacters = Tables.chars.data.length;
   document.querySelector('#totalWords').innerHTML = totalWords;
   document.querySelector('#totalCharacters').innerHTML = knownCharacters;
 }

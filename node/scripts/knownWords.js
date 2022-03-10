@@ -35,6 +35,15 @@ function knownWordsTable() {
   });
 }
 
+function knownCharsTable() {
+  return [... knownCharacters].map(ch => {
+    return {
+      word: ch,
+      isKnown: (ch in known),
+    }
+  });
+}
+
 function numKnownCharacters() {
   return knownCharacters.size;
 }
@@ -51,8 +60,12 @@ module.exports = {
     // we know it at least somewhat known
     return known[word] >= howKnown;
   },
+  isKnownChar: (ch) => {
+    return knownCharacters.has(ch);
+  },
 
   knownWordsTable: knownWordsTable,
+  knownCharsTable: knownCharsTable,
   knownWords: () => Object.keys(known).length,
   saveWords: saveWords,
   knownCharacters: numKnownCharacters,

@@ -4,33 +4,6 @@ const wordStats = require("./wordStats.js")
 
 const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"));
 
-function generateStats(segText) {
-  wordTable = {}
-  totalWords = 0
-  totalKnownWords = 0
-  totalWellKnownWords = 0
-  segText.forEach((sentence) => {
-    sentence.forEach(([word, type]) => {
-      if (type != 3) return;
-      totalWords += 1
-      // todo, iterate the word table to make this faster
-      if (known.isKnown(word)) {
-        totalKnownWords += 1
-        if (known.isKnown(word, 20)) {
-          totalWellKnownWords += 1
-        }
-      }
-      if (word in wordTable) {
-        wordTable[word] += 1
-      } else {
-        wordTable[word] = 1
-      }
-
-    });
-  });
-  return [wordTable, totalWords, totalKnownWords, totalWellKnownWords]
-
-}
 
 
 class Document {
@@ -43,12 +16,11 @@ class Document {
       fullFilename,
       "UTF-8", "r"));
 
-    [
-      this.wordTable,
-      this.totalWords,
-      this.totalWellKnownWords,
-      this.totalKnownWords
-    ] = generateStats(this.#segText)
+    //this.wordTable,
+    //this.totalWords,
+    //this.totalWellKnownWords,
+    //this.totalKnownWords
+    this.#generateStats();
 
     this.wellKnownWords = {}
     this.knownWords = {}
@@ -61,8 +33,41 @@ class Document {
         this.unKnownWords[word] = occurances
       }
     });
-
   };
+
+  #generateStats() {
+    this.wordTable = {}
+    this.totalWords = 0
+    this.totalKnownWords = 0
+    this.totalWellKnownWords = 0
+    this.charTable = {}
+    this.#segText.forEach((sentence) => {
+      sentence.forEach(([word, type]) => {
+        if (type != 3) return;
+        this.totalWords += 1
+        // todo, iterate the word table to make this faster
+        if (known.isKnown(word)) {
+          this.totalKnownWords += 1
+          if (known.isKnown(word, 20)) {
+            this.totalWellKnownWords += 1
+          }
+        }
+        if (word in this.wordTable) {
+          this.wordTable[word] += 1
+        } else {
+          this.wordTable[word] = 1
+        }
+        Array.from(word).forEach(ch => {
+          if (ch in this.charTable) {
+            this.charTable[ch] += 1
+          } else {
+            this.charTable[ch] = 1
+          }
+        });
+      });
+    });
+  }
+
   get text() {
     return this.#segText
   };
@@ -80,7 +85,16 @@ class Document {
         stars: wordStats.frequency(word),
       };
     });
+  }
 
+  documentChars() {
+    return Object.entries(this.charTable).map(([ch, occurances]) => {
+      return {
+        word: ch,
+        occurances: occurances,
+        isKnown: known.isKnownChar(ch),
+      }
+    });
   }
 
   documentStats() {
