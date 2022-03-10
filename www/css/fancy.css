@@ -26,6 +26,7 @@ body {
 .statsTable {
   display: inline;
   float: right;
+  margin: 20px;
 }
 
 .wrapper {
@@ -66,10 +67,17 @@ body {
   float: right;
 }
 
-.halfGrid {
-  display: inline-block;
+.titledGrid {
+  display: inline-flex;
+  flex-direction: column;
   height: 100%;
   width: 40%;
+}
+
+.nestedGrid {
+  display: inline-block;
+  height: 100%;
+  width: 100%;
 }
 
 .wrapper .content-row {
@@ -79,7 +87,6 @@ body {
 .tabcontent {
   width: 100%;
 }
-
 
 .wrapper .footer {
   flex: 0 1 40px;

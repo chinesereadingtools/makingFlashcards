@@ -109,9 +109,6 @@ docWordsCols = [
 
 charCols = [
   wordColumn(),
-  occuranceColumn({
-    width: 80
-  }),
   isKnownColumn({
     headerName: 'Alone',
   }),
