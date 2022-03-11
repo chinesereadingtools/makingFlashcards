@@ -8,6 +8,7 @@ local config = require "Config"
 local cta = require "cta"
 local lfs = require "lfs"
 local JSON = require "JSON"
+local Library = require "BookLibrary"
 
 --This function finds the filename when given a complete path
 function GetFilename(fullpath)
@@ -16,6 +17,10 @@ function GetFilename(fullpath)
 end
 
 local function traverseDirectory(directory)
+    local lastChar = directory:sub(-1)
+    if lastChar == "/" then
+        directory = directory:sub(1, -2)
+    end
     for file in lfs.dir(directory) do
         -- ignore the . and .. directories
         if file ~= "." and file ~= ".." then
@@ -39,7 +44,25 @@ local function traverseDirectory(directory)
     end
 end
 
+function file_exists(name)
+    local f = io.open(name, "r")
+    if f ~= nil then
+        io.close(f)
+        return true
+    else
+        return false
+    end
+end
+
 function segmentFile(filename)
+    local info = Library.getBookData(filename)
+    local bookName = info.author .. " - " .. info.title
+    local outputFile = config.segmentedText .. bookName .. ".json"
+    if file_exists(outputFile) then
+        print(outputFile .. " already exists")
+        return
+    end
+
     local document = cta.Document(filename)
     local sentences = {}
     for line in document:lines() do
@@ -52,8 +75,7 @@ function segmentFile(filename)
         end
     end
 
-    local outputFile = config.segmentedText .. GetFilename(filename) .. ".json"
-    print(outputFile)
+    print("writing: " .. outputFile)
     local output = io.open(outputFile, "w")
     io.output(output)
     io.write(JSON:encode(sentences))

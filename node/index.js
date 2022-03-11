@@ -49,7 +49,11 @@ app.post("/exportwords", (req, res, next) => {
 app.post("/loadfile", (req, res, next) => {
   var filename = req.body.name;
   var wellKnown = req.body.wellKnown;
-  var howKnown = wellKnown ? 20 : 0;
+  if (wellKnown) {
+    var howKnown = 20
+  } else {
+    var howKnown = 0
+  }
 
   console.log(`Loading ${filename}`)
   var document = new documentStats.Document(filename);

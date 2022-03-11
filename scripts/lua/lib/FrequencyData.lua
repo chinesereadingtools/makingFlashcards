@@ -1,4 +1,3 @@
---local cta = require "cta"
 local JSON = require "JSON"
 local config = require "Config"
 local FrequencyData = {}
