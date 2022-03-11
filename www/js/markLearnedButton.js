@@ -11,8 +11,6 @@ class MarkLearnedRenderer {
       if (rowData.isKnown == false) {
         row.setDataValue('isKnown', true)
       }
-
-
       const filterInstance = Tables.sentences.api.getFilterInstance(
         'word');
       filterInstance.addWord(rowData.word);
@@ -28,4 +26,21 @@ class MarkLearnedRenderer {
   refresh(params) {
     return false;
   }
+}
+
+class CenteredRenderer {
+  init(params) {
+    this.eGui = document.createElement('span')
+    this.eGui.innerHTML = params.value
+    this.eGui.classList.add('centered')
+  }
+
+  getGui() {
+    return this.eGui;
+  }
+
+  refresh(params) {
+    return false;
+  }
+
 }

@@ -10,6 +10,7 @@ function starsColumn(other) {
     headerName: 'Stars',
     field: 'stars',
     width: 200,
+    cellRenderer: CenteredRenderer,
     filter: StarsFilter,
     suppressSizeToFit: true
   }, other);
@@ -32,6 +33,7 @@ function wordColumn() {
     headerName: 'Word',
     field: 'word',
     resizable: true,
+    cellRenderer: CenteredRenderer,
     width: 130,
     filter: WordFilter,
     suppressSizeToFit: true
@@ -44,6 +46,7 @@ function occuranceColumn(other) {
     field: 'occurances',
     sortable: true,
     width: 100,
+    cellRenderer: CenteredRenderer,
     filter: 'agNumberColumnFilter',
     suppressSizeToFit: true
   }, other);
@@ -55,6 +58,7 @@ function isKnownColumn(other) {
     field: 'isKnown',
     resizable: false,
     filter: KnownFilter,
+    cellRenderer: CenteredRenderer,
     width: 160,
     suppressSizeToFit: true
   }, other);
@@ -72,12 +76,14 @@ var sentenceCols = [
     field: 'position',
     width: 100,
     filter: true,
+    cellRenderer: CenteredRenderer,
     suppressSizeToFit: true
   },
   {
     headerName: 'Sentence',
     field: 'sentence',
     resizable: true,
+    cellRenderer: CenteredRenderer,
     wrapText: true,
     autoHeight: true
   },
@@ -91,6 +97,7 @@ wordsCols = [
     field: 'interval',
     resizable: false,
     sortable: true,
+    cellRenderer: CenteredRenderer,
     width: 160,
     suppressSizeToFit: true
   },

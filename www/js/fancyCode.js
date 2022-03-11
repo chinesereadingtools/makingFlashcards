@@ -226,7 +226,7 @@ function reCalcSentenceStats() {
   if (data == undefined) {
     return;
   }
-  var wellKnown = data.wellKnown
+  var wellKnown = Tables.sentences.data.wellKnown
   var currentWords = {}
   Tables.sentences.api.forEachNodeAfterFilter((rowNode, index) => {
     currentWords[rowNode.data.word] = rowNode.data.occurances
@@ -240,7 +240,11 @@ function reCalcSentenceStats() {
   });
   var percent = occurances / data.totalWords * 100;
 
-  var currentKnown = !wellKnown ? data.currentWellKnown : data.currentKnown
+  if (wellKnown) {
+    var currentKnown = data.currentWellKnown 
+  } else {
+    var currentKnown = data.currentKnown
+  }
   document.querySelector('#oneTwords').innerHTML = words;
   document.querySelector('#occurances').innerHTML = occurances;
   document.querySelector('#percent').innerHTML = percent.toFixed(2);
