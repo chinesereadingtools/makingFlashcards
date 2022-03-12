@@ -18,19 +18,40 @@ end
 
 function loadLibrary()
     local books = {}
+    local catalogue = {}
     local cmd =
-        "calibredb --library-path '" .. config.library ..
-        "' list -f cover,authors,title --for-machine --sort-by authors"
+        "calibredb --library-path '" ..
+        config.library .. "' list -f cover,authors,title --for-machine --sort-by authors"
     local handle = io.popen(cmd)
     local result = handle:read("*a")
     handle:close()
     booksJson = JSON:decode(result)
     for a, b in pairs(booksJson) do
-      local author = b.authors
-      local path = GetFilepath(b.cover)
-      local title = b.title
-      books[path] = {author = author, title = title}
+        local author = b.authors
+        local path = GetFilepath(b.cover)
+        local title = b.title
+        local entry = author .. " - " .. title
+        local segmentedText = config.segmentedText .. entry .. ".json"
+        books[path] = {
+            author = author,
+            title = title,
+            path = path,
+            entry = entry,
+            segmentedText = segmentedText
+        }
+        catalogue[entry] = {
+            author = author,
+            title = title,
+            path = path,
+            entry = entry,
+            segmentedText = segmentedText
+        }
     end
+    -- save the book results so they can be used by other applications
+    local catalogueFile = io.open(config.catalogue, "w")
+    io.output(catalogueFile)
+    io.write(JSON:encode(catalogue))
+    io.close(catalogueFile)
     return books
 end
 
@@ -40,6 +61,5 @@ function BookLibrary.getBookData(filepath)
     path = GetFilepath(filepath)
     return Books[path]
 end
-
 
 return BookLibrary

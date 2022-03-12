@@ -11,7 +11,7 @@ class Document {
   constructor(filename) {
     this.filename = filename
 
-    var fullFilename = config.segmentedText + filename
+    var fullFilename = filename
     this.#segText = JSON.parse(fs.readFileSync(
       fullFilename,
       "UTF-8", "r"));

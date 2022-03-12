@@ -9,6 +9,7 @@ const oneTsentences = require("./scripts/oneTsentences.js")
 const importFromAnki = require("./scripts/importFromAnki.js")
 const knownWords = require("./scripts/knownWords.js")
 const documentStats = require("./scripts/documentStats.js")
+const catalogue = require("./scripts/bookCatalogue.js")
 
 const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"))
 
@@ -22,12 +23,8 @@ app.get("/hello", (req, res, next) => {
 })
 
 app.get("/filelist", (req, res, next) => {
-  fs.readdir(config.segmentedText, (err, files) => {
-    var jsonFiles = files.filter((elem) => {
-      return elem.endsWith(".json")
-    });
-    res.json(jsonFiles);
-  });
+  var jsonFiles = catalogue.listBooks()
+  res.json(jsonFiles);
 });
 
 app.post("/exportwords", (req, res, next) => {
@@ -47,7 +44,7 @@ app.post("/exportwords", (req, res, next) => {
 });
 
 app.post("/loadfile", (req, res, next) => {
-  var filename = req.body.name;
+  var bookname = req.body.name;
   var wellKnown = req.body.wellKnown;
   if (wellKnown) {
     var howKnown = 20
@@ -55,6 +52,7 @@ app.post("/loadfile", (req, res, next) => {
     var howKnown = 0
   }
 
+  var filename = catalogue.getPath(bookname)
   console.log(`Loading ${filename}`)
   var document = new documentStats.Document(filename);
   var documentWords = document.documentWords();

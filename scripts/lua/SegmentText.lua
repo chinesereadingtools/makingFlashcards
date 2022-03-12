@@ -56,8 +56,8 @@ end
 
 function segmentFile(filename)
     local info = Library.getBookData(filename)
-    local bookName = info.author .. " - " .. info.title
-    local outputFile = config.segmentedText .. bookName .. ".json"
+    local bookName = info.entry
+    local outputFile = info.segmentedText
     if file_exists(outputFile) then
         print(outputFile .. " already exists")
         return

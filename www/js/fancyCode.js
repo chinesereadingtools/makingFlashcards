@@ -10,17 +10,15 @@ async function main() {
   var cGridDiv = document.querySelector('#charGrid')
   new agGrid.Grid(cGridDiv, Tables.chars)
 
+  Tables.sentences.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth - 40)
+
   let response = await fetch("/filelist");
   let data = await response.json();
   var fileSelector = document.querySelector('#jsonFiles');
-
-  Tables.sentences.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth -
-    40)
-
-  data.forEach((file) => {
+  data.forEach(title  => {
     var opt = document.createElement('option');
-    opt.value = file;
-    opt.innerHTML = file;
+    opt.value = title;
+    opt.innerHTML =  title;
     fileSelector.appendChild(opt);
   });
 
