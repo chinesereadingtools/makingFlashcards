@@ -85,7 +85,6 @@ var sentenceCols = [
     resizable: true,
     cellRenderer: CenteredRenderer,
     wrapText: true,
-    autoHeight: true
   },
 ]
 
@@ -133,14 +132,18 @@ var Tables = {
   sentences: {
     columnDefs: sentenceCols,
     rowData: [],
-    rowHeight: 100,
     // todo, predict height based on number of characters in sentence
-    //getRowHeight: params => params.
+    rowHeight: 100,
+    getRowHeight: params => {
+      var sentenceLength = params.data.sentence.length
+      if (sentenceLength > 100) {
+        return 150;
+      } else {
+        return 100;
+      }
+    },
     rowBuffer: 100,
-    rowSelection: 'multiple',
     enableCellTextSelection: true,
-    ensureDomOrder: true,
-    suppressColumnVirtualisation: true,
     suppressRowClickSelection: true,
     // If these can be ratelimited then reenable
     // onBodyScrollEnd: (event) => migakuParse(),
