@@ -22,14 +22,6 @@ async function invoke(action, params) {
   return response.json()
 }
 
-function resolveAfter2Seconds() {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve('resolved');
-    }, 2000);
-  });
-}
-
 async function exportAnkiKeywords() {
   var sync = await invoke('sync')
   var reading = await invoke('findCards', {
