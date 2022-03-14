@@ -55,8 +55,6 @@ async function main() {
 
 }
 
-
-
 function openGrid(button) {
   // Declare all variables
   var gridName = button.getAttribute('target')
