@@ -12,7 +12,6 @@ function starsColumn(other) {
     width: 200,
     cellRenderer: CenteredRenderer,
     filter: StarsFilter,
-    suppressSizeToFit: true
   }, other);
 }
 
@@ -23,7 +22,6 @@ function markLearnedColumn(other) {
       cellRenderer: MarkLearnedRenderer,
       resizable: false,
       width: 50,
-      suppressSizeToFit: true
     },
     other);
 }
@@ -36,7 +34,6 @@ function wordColumn() {
     cellRenderer: CenteredRenderer,
     width: 130,
     filter: WordFilter,
-    suppressSizeToFit: true
   }
 }
 
@@ -48,8 +45,7 @@ function occuranceColumn(other) {
     sort: 'desc',
     width: 100,
     cellRenderer: CenteredRenderer,
-    filter: 'agNumberColumnFilter',
-    suppressSizeToFit: true
+    filter: 'agNumberColumnFilter'
   }, other);
 }
 
@@ -60,17 +56,23 @@ function isKnownColumn(other) {
     resizable: false,
     filter: KnownFilter,
     cellRenderer: CenteredRenderer,
-    width: 160,
-    suppressSizeToFit: true
+    width: 160
   }, other);
 }
 
 var sentenceCols = [
-  markLearnedColumn(),
-  wordColumn(),
-  occuranceColumn(),
+  markLearnedColumn({
+    suppressSizeToFit: true
+  }),
+  wordColumn({
+    suppressSizeToFit: true
+  }),
+  occuranceColumn({
+    suppressSizeToFit: true
+  }),
   starsColumn({
-    width: 160
+    width: 160,
+    suppressSizeToFit: true
   }),
   {
     headerName: 'Pos',

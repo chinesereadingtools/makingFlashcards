@@ -11,6 +11,8 @@ async function main() {
   new agGrid.Grid(cGridDiv, Tables.chars)
 
   Tables.sentences.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth - 40)
+  Tables.words.columnApi.sizeColumnsToFit(wGridDiv.offsetWidth)
+  Tables.docWords.columnApi.sizeColumnsToFit(dGridDiv.offsetWidth)
 
   let response = await fetch("/filelist");
   let data = await response.json();
