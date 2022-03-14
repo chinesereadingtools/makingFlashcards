@@ -45,6 +45,7 @@ function occuranceColumn(other) {
     headerName: '#',
     field: 'occurances',
     sortable: true,
+    sort: 'desc',
     width: 100,
     cellRenderer: CenteredRenderer,
     filter: 'agNumberColumnFilter',

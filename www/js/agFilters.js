@@ -81,6 +81,17 @@ class KnownFilter {
   isFilterActive() {
     return this.value != 'all';
   }
+
+  getModel() {
+    return {
+      state: this.value
+    }
+  }
+
+  setModel(newModel) {
+    this.value = newModel.state
+    this.filterChangedCallback();
+  }
 }
 
 class WordFilter {

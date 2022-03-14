@@ -24,9 +24,21 @@ body {
 }
 
 .statsTable {
+  margin: 20px;
+}
+
+.leftBar {
   display: inline;
   float: right;
   margin: 20px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.title {
+  text-align: center;
+  font-size: 30px;
 }
 
 .wrapper {

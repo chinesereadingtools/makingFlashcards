@@ -37,6 +37,17 @@ async function main() {
     saveWordList);
   document.querySelector('#jsonFiles').addEventListener('change',
     () => loadFile(false));
+  document.querySelector('#showKnown').addEventListener('click',
+    () => {
+      const filter = Tables.docWords.api.getFilterInstance('isKnown')
+      filter.setModel({state:'known'})
+    });
+  document.querySelector('#showUnknown').addEventListener('click',
+    () => {
+      const filter = Tables.docWords.api.getFilterInstance('isKnown')
+      filter.setModel({state:'unknown'})
+    }
+  );
 
   document.querySelectorAll('.tablinks').forEach((target) => {
     target.addEventListener('click',
@@ -78,23 +89,6 @@ function openGrid(button) {
   migakuParse();
 }
 
-function sortRowData(rowData) {
-  rowData.sort((x, y) => {
-    if (x.occurances == y.occurances) {
-      if (x.word > y.word) {
-        return -1
-      } else {
-        return 1
-      }
-    } else {
-      if (x.occurances > y.occurances) {
-        return -1;
-      } else {
-        return 1;
-      }
-    }
-  });
-}
 
 async function exportWords(rows) {
   withLoader(async () => {
@@ -204,7 +198,6 @@ async function loadFile(wellKnown = false) {
 
   Tables.sentences.data = sentences
   Tables.sentences.data.wellKnown = wellKnown;
-  sortRowData(sentences.rowData)
   Tables.sentences.api.setRowData(sentences.rowData)
 
   Tables.docWords.data = words
