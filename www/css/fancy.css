@@ -89,7 +89,6 @@ body {
 .nestedGrid {
   display: inline-block;
   height: 100%;
-  width: 100%;
 }
 
 .wrapper .content-row {
@@ -107,14 +106,18 @@ body {
 
 button {
   background-color: #6712a7;
+  padding: 0.35em 1.2em;
+  margin: 0 0.3em 0.3em 0;
+}
+
+select {
+  font-size: 20px;
 }
 
 button,
 select {
   display: inline-block;
-  padding: 0.35em 1.2em;
   border: 0.1em solid #FFFFFF;
-  margin: 0 0.3em 0.3em 0;
   border-radius: 0.12em;
   box-sizing: border-box;
   text-decoration: none;
@@ -155,6 +158,13 @@ button:hover {
   border-radius: 10px;
   height: 20px;
   width: 20px;
+}
+
+.loadButtons {
+  display: inline;
+  margin: 0.4em;
+  float: right;
+
 }
 
 button.markLearned:hover {

@@ -16,10 +16,6 @@ class Document {
       fullFilename,
       "UTF-8", "r"));
 
-    //this.wordTable,
-    //this.totalWords,
-    //this.totalWellKnownWords,
-    //this.totalKnownWords
     this.#generateStats();
 
     this.wellKnownWords = {}
