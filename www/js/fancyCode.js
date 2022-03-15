@@ -202,7 +202,8 @@ async function loadFile(wellKnown = false) {
   Tables.sentences.data.wellKnown = wellKnown;
   Tables.sentences.api.setRowData(sentences.rowData)
 
-  Tables.docWords.data = words
+  Tables.docWords.data = words;
+  Tables.docWords.stats = data.stats;
   Tables.docWords.api.setRowData(words);
 
   Tables.docChars.data = chars;
@@ -246,11 +247,13 @@ function reCalcSentenceStats() {
   var bookChars = Tables.docChars.data.length
   var knownBookChars = Tables.docChars.data.filter(entry => entry.isKnown)
     .length
+  var totalWords = Tables.docWords.stats.totalWords
 
   document.querySelector('#bookWords').innerHTML = bookWords;
   document.querySelector('#knownBookWords').innerHTML = knownBookWords;
   document.querySelector('#bookCharacters').innerHTML = bookChars;
   document.querySelector('#knownBookCharacters').innerHTML = knownBookChars;
+  document.querySelector('#totalBookWords').innerHTML = totalWords;
 }
 
 function reCalcWordStats() {

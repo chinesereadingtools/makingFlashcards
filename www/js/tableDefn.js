@@ -26,23 +26,25 @@ function markLearnedColumn(other) {
     other);
 }
 
-function wordColumn() {
-  return {
+function wordColumn(other) {
+  return override({
     headerName: 'Word',
     field: 'word',
     resizable: true,
+    sort: 'desc',
+    sortIndex: 2,
     cellRenderer: CenteredRenderer,
     width: 130,
     filter: WordFilter,
-  }
+  }, other);
 }
 
 function occuranceColumn(other) {
   return override({
     headerName: '#',
     field: 'occurances',
-    sortable: true,
     sort: 'desc',
+    sortIndex: 1,
     width: 100,
     cellRenderer: CenteredRenderer,
     filter: 'agNumberColumnFilter'

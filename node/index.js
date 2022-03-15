@@ -57,8 +57,10 @@ app.post("/loadfile", (req, res, next) => {
   var document = new documentStats.Document(filename);
   var documentWords = document.documentWords();
   var documentChars = document.documentChars();
+  var stats = document.documentStats()
   var parsed = oneTsentences.parse(document, howKnown)
   res.json({
+    stats: stats,
     sentences: parsed,
     docWords: documentWords,
     chars: documentChars
