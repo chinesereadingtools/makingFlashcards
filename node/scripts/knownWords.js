@@ -48,6 +48,10 @@ function numKnownCharacters() {
   return knownCharacters.size;
 }
 
+function knownLevels() {
+  return wordStats.frequencyStats(known)
+}
+
 // exports various dictionaries
 module.exports = {
   addWord: addWord,
@@ -69,5 +73,6 @@ module.exports = {
   knownWords: () => Object.keys(known).length,
   saveWords: saveWords,
   knownCharacters: numKnownCharacters,
+  knownLevels: knownLevels,
 
 }

@@ -13,14 +13,16 @@ async function main() {
   Tables.sentences.columnApi.sizeColumnsToFit(eGridDiv.offsetWidth - 40)
   Tables.words.columnApi.sizeColumnsToFit(wGridDiv.offsetWidth)
   Tables.docWords.columnApi.sizeColumnsToFit(dGridDiv.offsetWidth)
+  Tables.chars.columnApi.sizeColumnsToFit(dcGridDiv.offsetWidth)
+  Tables.docChars.columnApi.sizeColumnsToFit(cGridDiv.offsetWidth)
 
   let response = await fetch("/filelist");
   let data = await response.json();
   var fileSelector = document.querySelector('#jsonFiles');
-  data.forEach(title  => {
+  data.forEach(title => {
     var opt = document.createElement('option');
     opt.value = title;
-    opt.innerHTML =  title;
+    opt.innerHTML = title;
     fileSelector.appendChild(opt);
   });
 
@@ -42,12 +44,16 @@ async function main() {
   document.querySelector('#showKnown').addEventListener('click',
     () => {
       const filter = Tables.docWords.api.getFilterInstance('isKnown')
-      filter.setModel({state:'known'})
+      filter.setModel({
+        state: 'known'
+      })
     });
   document.querySelector('#showUnknown').addEventListener('click',
     () => {
       const filter = Tables.docWords.api.getFilterInstance('isKnown')
-      filter.setModel({state:'unknown'})
+      filter.setModel({
+        state: 'unknown'
+      })
     }
   );
 
@@ -169,6 +175,8 @@ async function loadKnownWords() {
   var words = data.words;
   var chars = data.chars;
 
+  Tables.otherStats = data;
+
   Tables.words.data = words;
   Tables.words.api.setRowData(words);
   Tables.chars.data = chars;
@@ -233,7 +241,7 @@ function reCalcSentenceStats() {
   var percent = occurances / data.totalWords * 100;
 
   if (wellKnown) {
-    var currentKnown = data.currentWellKnown 
+    var currentKnown = data.currentWellKnown
   } else {
     var currentKnown = data.currentKnown
   }
@@ -259,8 +267,23 @@ function reCalcSentenceStats() {
 function reCalcWordStats() {
   var totalWords = Tables.words.data.length;
   var knownCharacters = Tables.chars.data.length;
+  var stats = Tables.otherStats.knownLevels;
+  console.log(stats)
   document.querySelector('#totalWords').innerHTML = totalWords;
   document.querySelector('#totalCharacters').innerHTML = knownCharacters;
+  document.querySelector('#totalFiveStar').innerHTML = stats.counts["5"];
+  document.querySelector('#knownFiveStar').innerHTML = stats.knownCounts["5"];
+  document.querySelector('#percentFiveStar').innerHTML = (
+    stats.knownCounts[
+      "5"] /
+    stats.counts["5"] * 100).toFixed(2);
+
+  document.querySelector('#totalFourStar').innerHTML = stats.counts["4"];
+  document.querySelector('#knownFourStar').innerHTML = stats.knownCounts["4"];
+  document.querySelector('#percentFourStar').innerHTML = (
+    stats.knownCounts[
+      "4"] /
+    stats.counts["4"] * 100).toFixed(2);
 }
 
 // Prevent migaku empty spans from messing stuff up

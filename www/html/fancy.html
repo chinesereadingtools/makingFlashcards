@@ -33,7 +33,7 @@
         <button class="tablinks tab" target='sentenceTab'
           id="defaultTab">Sentences</button>
         <button class="tablinks tab" target='wordTab'>Words</button>
-        <button class="tablinks tab" target='charTab'>Characters</button>
+        <button class="tablinks tab" target='charTab'>Char/Stats</button>
 
         <div style="float:right">
           <button id="toggleButton" type="button">Toggle Migaku</button>
@@ -82,11 +82,11 @@
         </div>
       </div>
       <div id="charTab" class="content-row tabcontent">
-        <div class="titledGrid">
+        <div class="titledGrid narrow">
           <div class="title">All known Characters</div>
           <div id="charGrid" class="nestedGrid ag-theme-balham-dark"></div>
         </div>
-        <div class="titledGrid">
+        <div class="titledGrid narrow">
           <div class="title">Characters in Book</div>
           <div id="docCharGrid" class="nestedGrid ag-theme-balham-dark"></div>
         </div>
@@ -103,6 +103,34 @@
             <tr>
               <th>Known Book Characters</th>
               <th id="knownBookCharacters"></th>
+            </tr>
+          </table>
+          <table class="statsTable">
+            <tr>
+              <th>Total 5 star words</th>
+              <th id="totalFiveStar"></th>
+            </tr>
+            <tr>
+              <th>Known 5 star words</th>
+              <th id="knownFiveStar"></th>
+            </tr>
+            <tr>
+              <th>Percent 5 star words</th>
+              <th id="percentFiveStar"></th>
+            </tr>
+          </table>
+          <table class="statsTable">
+            <tr>
+              <th>Total 4 star words</th>
+              <th id="totalFourStar"></th>
+            </tr>
+            <tr>
+              <th>Known 4 star words</th>
+              <th id="knownFourStar"></th>
+            </tr>
+            <tr>
+              <th>Percent 4 star words</th>
+              <th id="percentFourStar"></th>
             </tr>
           </table>
         </div>

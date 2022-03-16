@@ -70,9 +70,12 @@ app.post("/loadfile", (req, res, next) => {
 app.post("/getKnownWords", (req, res, next) => {
   var words = knownWords.knownWordsTable();
   var chars = knownWords.knownCharsTable();
+  var knownLevels =  knownWords.knownLevels();
+
   res.json({
     words: words,
     chars: chars,
+    knownLevels: knownLevels, 
   });
 });
 
