@@ -25,7 +25,9 @@ body {
 
 .statsTable {
   margin: 20px;
+  text-align: left;
 }
+
 
 .leftBar {
   display: inline;

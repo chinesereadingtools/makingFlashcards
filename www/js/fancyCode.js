@@ -56,6 +56,21 @@ async function main() {
       })
     }
   );
+  document.querySelector('#showKnownChar').addEventListener('click',
+    () => {
+      const filter = Tables.docChars.api.getFilterInstance('isKnown')
+      filter.setModel({
+        state: 'known'
+      })
+    });
+  document.querySelector('#showUnknownChar').addEventListener('click',
+    () => {
+      const filter = Tables.docChars.api.getFilterInstance('isKnown')
+      filter.setModel({
+        state: 'unknown'
+      })
+    }
+  );
 
   document.querySelectorAll('.tablinks').forEach((target) => {
     target.addEventListener('click',
