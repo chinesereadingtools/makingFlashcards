@@ -27,25 +27,27 @@ function loadLibrary()
     handle:close()
     booksJson = JSON:decode(result)
     for a, b in pairs(booksJson) do
-        local author = b.authors
-        local path = GetFilepath(b.cover)
-        local title = b.title
-        local entry = author .. " - " .. title
-        local segmentedText = config.segmentedText .. entry .. ".json"
-        books[path] = {
-            author = author,
-            title = title,
-            path = path,
-            entry = entry,
-            segmentedText = segmentedText
-        }
-        catalogue[entry] = {
-            author = author,
-            title = title,
-            path = path,
-            entry = entry,
-            segmentedText = segmentedText
-        }
+        if (b.cover ~= nil) then
+            local author = b.authors
+            local path = GetFilepath(b.cover)
+            local title = b.title
+            local entry = author .. " - " .. title
+            local segmentedText = config.segmentedText .. entry .. ".json"
+            books[path] = {
+                author = author,
+                title = title,
+                path = path,
+                entry = entry,
+                segmentedText = segmentedText
+            }
+            catalogue[entry] = {
+                author = author,
+                title = title,
+                path = path,
+                entry = entry,
+                segmentedText = segmentedText
+            }
+        end
     end
     -- save the book results so they can be used by other applications
     local catalogueFile = io.open(config.catalogue, "w")
