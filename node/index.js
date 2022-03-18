@@ -27,6 +27,18 @@ app.get("/filelist", (req, res, next) => {
   res.json(jsonFiles);
 });
 
+app.post("/addfavorite", (req, res, next) => {
+  var bookTitle = req.body.title;
+  catalogue.addFavorite(bookTitle)
+  res.json({success:true});
+
+});
+
+app.get("/favfilelist", (req, res, next) => {
+  var jsonFiles = catalogue.listFavorites()
+  res.json(jsonFiles);
+});
+
 app.post("/exportwords", (req, res, next) => {
   var words = req.body.words
   console.log(words)

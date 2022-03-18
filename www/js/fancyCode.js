@@ -16,16 +16,7 @@ async function main() {
   Tables.chars.columnApi.sizeColumnsToFit(dcGridDiv.offsetWidth)
   Tables.docChars.columnApi.sizeColumnsToFit(cGridDiv.offsetWidth)
 
-  let response = await fetch("/filelist");
-  let data = await response.json();
-  var fileSelector = document.querySelector('#jsonFiles');
-  data.forEach(title => {
-    var opt = document.createElement('option');
-    opt.value = title;
-    opt.innerHTML = title;
-    fileSelector.appendChild(opt);
-  });
-
+  await loadFileList();
 
   document.querySelector('#toggleButton').addEventListener('click',
     toggleMigakuContainer);
@@ -39,6 +30,10 @@ async function main() {
     () => loadFile(true));
   document.querySelector('#saveProgress').addEventListener('click',
     saveWordList);
+  document.querySelector('#favorite').addEventListener('click',
+    addFavorite);
+  document.querySelector('#showfavorite').addEventListener('click',
+    loadFavorites);
   document.querySelector('#jsonFiles').addEventListener('change',
     () => loadFile(false));
   document.querySelector('#showKnown').addEventListener('click',
@@ -160,6 +155,48 @@ async function withLoader(fn) {
   showLoader();
   await fn();
   finishLoader();
+}
+
+async function addFavorite() {
+  var fileSelector = document.querySelector('#jsonFiles');
+  let response = await fetch("/addfavorite", {
+    method: 'POST',
+    headers: {
+      'Content-Type': "application/json;charset=utf-8"
+    },
+    body: JSON.stringify({
+      title: fileSelector.value,
+    })
+  });
+  let data = await response.json();
+}
+
+async function loadFileList() {
+  let response = await fetch("/filelist");
+  let data = await response.json();
+  var fileSelector = document.querySelector('#jsonFiles');
+  fileSelector.innerHTML = ""
+  data.forEach(title => {
+    var opt = document.createElement('option');
+    opt.value = title;
+    opt.innerHTML = title;
+    fileSelector.appendChild(opt);
+  });
+  return
+}
+
+async function loadFavorites() {
+  let response = await fetch("/favfilelist");
+  let data = await response.json();
+  var fileSelector = document.querySelector('#jsonFiles');
+  fileSelector.innerHTML = ""
+  data.forEach(title => {
+    var opt = document.createElement('option');
+    opt.value = title;
+    opt.innerHTML = title;
+    fileSelector.appendChild(opt);
+  });
+
 }
 
 async function saveWordList() {
