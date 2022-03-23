@@ -17,6 +17,7 @@ function addWord(word, age) {
 function saveWords(callback) {
   fs.writeFile(config.knownWordsJson, JSON.stringify(known), (err) => {
     words = Object.keys(known);
+    console.log(`Saved ${words.length} words`)
     fs.writeFile(config.knownWords, words.join("\n"), callback);
   });
 }

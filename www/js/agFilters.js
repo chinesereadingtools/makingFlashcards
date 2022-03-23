@@ -1,28 +1,52 @@
 class StarsFilter {
   init(params) {
     this.eGui = document.createElement('div');
+    //this.eGui.innerHTML = `<div style="display: inline-block;">
+    //            <select id="numberOfStars" name="fruit">
+    //              <option value ="0">Nothing</option>
+    //              <option value ="5">★★★★★</option>
+    //              <option value ="4">★★★★</option>
+    //              <option value ="3">★★★</option>
+    //              <option value ="2">★★</option>
+    //              <option value ="1">★</option>
+    //            </select> 
+    //        </div>`;
+
+    this.options = [
+      "★★★★★",
+      "★★★★",
+      "★★★",
+      "★★",
+      "★",
+      "none",
+    ]
+    var optionsHtml = this.options.map(elem => {
+      return `<div>
+          <label for="${elem}">
+            <input type="checkbox" id="${elem}" value="${elem}" checked> ${elem}  
+          </label>
+          </div>`
+    }).join("");
+
     this.eGui.innerHTML = `<div style="display: inline-block;">
-                <select id="numberOfStars" name="fruit">
-                  <option value ="0">Nothing</option>
-                  <option value ="5">★★★★★</option>
-                  <option value ="4">★★★★</option>
-                  <option value ="3">★★★</option>
-                  <option value ="2">★★</option>
-                  <option value ="1">★</option>
-                </select> 
+              ${optionsHtml}
             </div>`;
-    this.numberOfStars = this.eGui.querySelector('#numberOfStars');
-    this.numberOfStars.addEventListener('change', this.onRbChanged.bind(
-      this));
+    this.starsCheckboxes = this.eGui.querySelectorAll('input[type=checkbox]');
+    this.starsCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', event => {
+        this.onChanged()
+      });
+    });
     this.filterActive = false;
     this.stars = 0
     this.filterChangedCallback = params.filterChangedCallback;
   }
 
-  onRbChanged() {
-    var value = this.numberOfStars.value;
-    console.log(value)
-    this.stars = parseInt(value)
+  onChanged() {
+    var checkBoxes = [...this.starsCheckboxes.values()];
+    var checked = checkBoxes.filter(checkbox => checkbox.checked).map(
+      checkbox => checkbox.value);
+    this.options = checked;
     this.filterChangedCallback();
   }
 
@@ -31,11 +55,11 @@ class StarsFilter {
   }
 
   doesFilterPass(params) {
-    return params.data.stars == "★".repeat(this.stars);
+    return this.options.includes(params.data.stars);
   }
 
   isFilterActive() {
-    return this.stars != 0;
+    return this.options.length != 6;
   }
 }
 
