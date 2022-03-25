@@ -37,8 +37,15 @@ app.get("/favfilelist", (req, res, next) => {
   res.json(jsonFiles);
 });
 
+
+
 app.get("/listlist", (req, res, next) => {
   var jsonFiles = catalogue.listList()
+  res.json(jsonFiles);
+});
+
+app.post("/loadlist", (req, res, next) => {
+  var jsonFiles = catalogue.loadList(req.body.title)
   res.json(jsonFiles);
 });
 

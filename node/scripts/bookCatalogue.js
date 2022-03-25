@@ -47,6 +47,21 @@ module.exports = {
       }
     });
   },
+  loadList: (listname) => {
+    books = loadBooks()
+    var ourBooks = listCustomList(listname)
+    return ourBooks.map(bookKey => {
+      var book = books[bookKey]
+      var document = new documentStats.Document(book.segmentedText);
+      var stats = document.documentStats()
+      return {
+        author: book.author,
+        title: book.title,
+        words: stats.totalWords,
+        percent: stats.currentKnown.toFixed(2)
+      }
+    });
+  },
   saveList: (listname, data) => {
     lists[listname] = data;
     fs.writeFileSync(listsFile, JSON.stringify(lists));

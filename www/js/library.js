@@ -14,8 +14,18 @@ async function main() {
   await loadListList();
 
 
-  document.querySelector('#addList').addEventListener('click', () => {
+  document.querySelector('#addList').addEventListener('click', async () => {
     var name = prompt("Name please")
+    let response = await fetch("/savelist", {
+      method: 'POST',
+      headers: {
+        'Content-Type': "application/json;charset=utf-8"
+      },
+      body: JSON.stringify({
+        title: name,
+        data: [],
+      })
+    });
     var selector = document.querySelector('#myBookLists');
     var opt = document.createElement('option');
     opt.value = name;
@@ -57,6 +67,9 @@ async function main() {
       });
     });
 
+  document.querySelector('#myBookLists').addEventListener('change',
+    () => loadListContents());
+
 }
 
 async function withLoader(fn) {
@@ -82,7 +95,26 @@ async function loadListList() {
     opt.innerHTML = title;
     selector.appendChild(opt);
   });
+  if (data.length > 0) {
+    await loadListContents()
+  }
   return
+}
+
+async function loadListContents() {
+  var selector = document.querySelector('#myBookLists');
+  var currentList = selector.value;
+  let response = await fetch("/loadlist", {
+    method: 'POST',
+    headers: {
+      'Content-Type': "application/json;charset=utf-8"
+    },
+    body: JSON.stringify({
+      title: currentList,
+    })
+  });
+  let data = await response.json()
+  Tables.myBookList.api.setRowData(data);
 }
 
 
@@ -131,6 +163,29 @@ bookListCols = [{
   },
 ]
 
+myBookListCols = [{
+    headerName: 'Title',
+    field: 'title',
+    width: 200,
+    rowDrag: true,
+    sortable: true,
+  },
+  {
+    headerName: 'Author',
+    field: 'author',
+    width: 100,
+    sortable: true,
+  },
+  {
+    headerName: '',
+    field: 'removeBook',
+    width: 50,
+    cellRenderer: RemoveBookRenderer,
+    resizeable: false,
+  },
+
+]
+
 var Tables = {
   bookList: {
     columnDefs: bookListCols,
@@ -147,7 +202,7 @@ var Tables = {
 
   },
   myBookList: {
-    columnDefs: bookListCols,
+    columnDefs: myBookListCols,
     rowData: [],
     rowHeight: 60,
     rowBuffer: 20,
