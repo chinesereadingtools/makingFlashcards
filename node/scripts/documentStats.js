@@ -4,18 +4,25 @@ const wordStats = require("./wordStats.js")
 
 const config = JSON.parse(fs.readFileSync("../config.json", "UTF-8", "r"));
 
-
-
 class Document {
   #segText;
   constructor(filename) {
     this.filename = filename
 
-    var fullFilename = filename
-    this.#segText = JSON.parse(fs.readFileSync(
-      fullFilename,
-      "UTF-8", "r"));
 
+    var cachedFileData = filename + ".cached"
+    if (fs.existsSync(cachedFileData)) {
+      var cachedData = JSON.parse(fs.readFileSync(cachedFileData, "UTF-8",
+        "r"));
+      [this.wordTable, this.charTable, this.totalWords] = cachedData;
+    } else {
+      // This is the most computationally heavy block and also 
+      // is deterministic, so cache the results
+      this.#loadSegText();
+      var dataToCache = this.#computeFrequencyData();
+      fs.writeFileSync(cachedFileData, JSON.stringify(dataToCache));
+      [this.wordTable, this.charTable, this.totalWords] = dataToCache;
+    }
     this.#generateStats();
 
     this.wellKnownWords = {}
@@ -31,40 +38,55 @@ class Document {
     });
   };
 
-  #generateStats() {
-    this.wordTable = {}
-    this.totalWords = 0
-    this.totalKnownWords = 0
-    this.totalWellKnownWords = 0
-    this.charTable = {}
+  #loadSegText() {
+    this.#segText = JSON.parse(fs.readFileSync(
+      this.filename,
+      "UTF-8", "r"));
+  };
+
+  #computeFrequencyData() {
+    var wordTable = {}
+    var charTable = {}
+    var totalWords = 0
     this.#segText.forEach((sentence) => {
       sentence.forEach(([word, type]) => {
         if (type != 3) return;
-        this.totalWords += 1
-        // todo, iterate the word table to make this faster
-        if (known.isKnown(word)) {
-          this.totalKnownWords += 1
-          if (known.isKnown(word, 20)) {
-            this.totalWellKnownWords += 1
-          }
-        }
-        if (word in this.wordTable) {
-          this.wordTable[word] += 1
+        totalWords += 1
+        if (word in wordTable) {
+          wordTable[word] += 1
         } else {
-          this.wordTable[word] = 1
+          wordTable[word] = 1
         }
         Array.from(word).forEach(ch => {
-          if (ch in this.charTable) {
-            this.charTable[ch] += 1
+          if (ch in charTable) {
+            charTable[ch] += 1
           } else {
-            this.charTable[ch] = 1
+            charTable[ch] = 1
           }
         });
       });
     });
+
+    return [wordTable, charTable, totalWords]
+  }
+
+  #generateStats() {
+    this.totalKnownWords = 0
+    this.totalWellKnownWords = 0
+    Object.entries(this.wordTable).forEach(([word, frequency]) => {
+      if (known.isKnown(word)) {
+        this.totalKnownWords += frequency
+        if (known.isKnown(word, 20)) {
+          this.totalWellKnownWords += frequency
+        }
+      }
+    })
   }
 
   get text() {
+    if (this.#segText == undefined) {
+      this.#loadSegText();
+    }
     return this.#segText
   };
 

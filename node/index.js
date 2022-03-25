@@ -27,15 +27,28 @@ app.get("/filelist", (req, res, next) => {
   res.json(jsonFiles);
 });
 
-app.post("/addfavorite", (req, res, next) => {
-  var bookTitle = req.body.title;
-  catalogue.addFavorite(bookTitle)
-  res.json({success:true});
-
+app.get("/filelistdata", (req, res, next) => {
+  var jsonFiles = catalogue.allBookData()
+  res.json(jsonFiles);
 });
 
 app.get("/favfilelist", (req, res, next) => {
   var jsonFiles = catalogue.listFavorites()
+  res.json(jsonFiles);
+});
+
+app.get("/listlist", (req, res, next) => {
+  var jsonFiles = catalogue.listList()
+  res.json(jsonFiles);
+});
+
+app.post("/savelist", (req, res, next) => {
+  var jsonFiles = catalogue.saveList(req.body.title, req.body.data)
+  res.json(jsonFiles);
+});
+
+app.post("/deletelist", (req, res, next) => {
+  var jsonFiles = catalogue.deleteList(req.body.title)
   res.json(jsonFiles);
 });
 

@@ -30,8 +30,6 @@ async function main() {
     () => loadFile(true));
   document.querySelector('#saveProgress').addEventListener('click',
     saveWordList);
-  document.querySelector('#favorite').addEventListener('click',
-    addFavorite);
   document.querySelector('#showfavorite').addEventListener('click',
     loadFavorites);
   document.querySelector('#jsonFiles').addEventListener('change',
@@ -157,19 +155,6 @@ async function withLoader(fn) {
   finishLoader();
 }
 
-async function addFavorite() {
-  var fileSelector = document.querySelector('#jsonFiles');
-  let response = await fetch("/addfavorite", {
-    method: 'POST',
-    headers: {
-      'Content-Type': "application/json;charset=utf-8"
-    },
-    body: JSON.stringify({
-      title: fileSelector.value,
-    })
-  });
-  let data = await response.json();
-}
 
 async function loadFileList() {
   let response = await fetch("/filelist");
